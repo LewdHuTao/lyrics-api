@@ -1,0 +1,25 @@
+{
+  "name": "llyrics-api",
+  "version": "1.1.0-dev",
+  "description": "A simple lyrics api that can fetch lyrics from Musixmatch and Genius API.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "LewdHuTao",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shittybot/llyrics-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shittybot/llyrics-api/issues"
+  },
+  "homepage": "https://github.com/shittybot/llyrics-api#readme"
+}
