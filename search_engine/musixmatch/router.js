@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const Musixmatch = require("./Musixmatch");
-const Cookies = require("js-cookie");
+const cookieParser = require("cookie-parser");
 
 const musixmatch = new Musixmatch();
 
 router.use(express.json());
+router.use(cookieParser());
 
 router.get("/musixmatch/lyrics", async (req, res) => {
   const { title } = req.query;
@@ -13,10 +14,10 @@ router.get("/musixmatch/lyrics", async (req, res) => {
     return res.status(400).send({ error: "Track Title is needed." });
   }
   try {
-    let userToken = Cookies.get("user_token");
+    let userToken = req.cookies.user_token;
     if (!userToken) {
       userToken = await musixmatch.getToken();
-      Cookies.set("user_token", userToken);
+      res.cookie("user_token", userToken); // Set the user token cookie
     }
     const tracks = await musixmatch.searchTrack(title, userToken);
     res.send(tracks);
@@ -33,10 +34,10 @@ router.get("/musixmatch/lyrics-search", async (req, res) => {
       .send({ error: "Title and artist parameters are required" });
   }
   try {
-    let userToken = Cookies.get("user_token");
+    let userToken = req.cookies.user_token;
     if (!userToken) {
       userToken = await musixmatch.getToken();
-      Cookies.set("user_token", userToken);
+      res.cookie("user_token", userToken); // Set the user token cookie
     }
     const response = await musixmatch.getLyricsSearch(title, artist, userToken);
     res.send(response);
