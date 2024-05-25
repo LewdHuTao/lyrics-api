@@ -27,6 +27,7 @@ class Genius {
     const track_name = data.response.hits[0].result.title;
     const artist_name = data.response.hits[0].result.primary_artist.name;
     const artwork_url = data.response.hits[0].result.song_art_image_thumbnail_url || null;
+    const search_engine = "Genius";
 
     const lyricsUrl = data.response.hits[0].result.url;
     const lyricsResponse = await fetch(lyricsUrl);
@@ -52,7 +53,7 @@ class Genius {
       });
     }
 
-    return { artist_name, track_name, artwork_url, lyrics };
+    return { artist_name, track_name, search_engine, artwork_url, lyrics };
   }
 }
 
