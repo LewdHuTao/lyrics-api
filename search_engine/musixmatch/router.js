@@ -8,8 +8,8 @@ const musixmatch = new Musixmatch();
 router.use(express.json());
 
 router.get("/musixmatch/lyrics", async (req, res) => {
-  const { query } = req.query;
-  if (!query) {
+  const { title } = req.query;
+  if (!title) {
     return res.status(400).send({ error: "Track Title is needed." });
   }
   try {
@@ -18,7 +18,7 @@ router.get("/musixmatch/lyrics", async (req, res) => {
       userToken = await musixmatch.getToken();
       Cookies.set("user_token", userToken);
     }
-    const tracks = await musixmatch.searchTrack(query, userToken);
+    const tracks = await musixmatch.searchTrack(title, userToken);
     res.send(tracks);
   } catch (error) {
     res.status(500).send({ error: "Internal Server Error." });

@@ -39,50 +39,69 @@ class Musixmatch {
     const formattedUrl = `${this.lyricsUrl}&track_id=${trackId}&usertoken=${userToken}`;
     const result = await this.get(formattedUrl);
     let lyrics = JSON.parse(result).message.body.subtitle.subtitle_body;
-    lyrics = lyrics.replace(/\[\d+:\d+\.\d+\]/g, '');
+    lyrics = lyrics.replace(/\[\d+:\d+\.\d+\]/g, "");
     lyrics = lyrics.trim();
     return lyrics;
   }
 
-  async searchTrack(query = null, userToken) {
-    const formattedUrl = `${this.searchTermUrl}&q_track=${query}&usertoken=${userToken}`;
-  
+  async searchTrack(title = null, userToken) {
+    const formattedUrl = `${this.searchTermUrl}&q_track=${title}&usertoken=${userToken}`;
+
     const result = await this.get(formattedUrl);
     const listResult = JSON.parse(result);
-  
+
     const data = listResult.message.body.track_list;
-  
+
     if (data.length === 0) {
       throw new Error("No tracks found for the given query.");
     }
-  
+
     const lyricsData = data[0].track;
     const lyrics = await this.getLyrics(lyricsData.track_id, userToken);
     const artist_name = lyricsData.artist_name;
     const track_name = lyricsData.track_name;
     const track_id = lyricsData.track_id;
     const artwork_url = lyricsData.album_coverart_350x350 || null;
-    return { artist_name, track_name, track_id, artwork_url, lyrics, };
+    const search_engine = "Musixmatch";
+    return {
+      artist_name,
+      track_name,
+      track_id,
+      search_engine,
+      artwork_url,
+      lyrics,
+    };
   }
-  
 
   async getLyricsSearch(title, artist = null, userToken) {
     const formattedUrl = `${this.lyricsAlternative}&usertoken=${userToken}&q_album=&q_artist=${artist}&q_artists=&track_spotify_id=&q_track=${title}`;
     const result = await this.get(formattedUrl);
     const lyricsData = JSON.parse(result);
-    const data = lyricsData.message.body.macro_calls["track.lyrics.get"].message.body.lyrics;
-    const data2 = lyricsData.message.body.macro_calls["matcher.track.get"].message.body.track;
+    const data =
+      lyricsData.message.body.macro_calls["track.lyrics.get"].message.body
+        .lyrics;
+    const data2 =
+      lyricsData.message.body.macro_calls["matcher.track.get"].message.body
+        .track;
 
     if (data.length === 0) {
       throw new Error("No tracks found for the given query");
-    } 
+    }
 
     const lyrics = data.lyrics_body;
     const track_id = data2.track_id;
     const track_name = data2.track_name;
     const artist_name = data2.artist_name;
     const artwork_url = data2.album_coverart_350x350 || null;
-    return { artist_name, track_name, track_id, artwork_url, lyrics, };
+    const search_engine = "Musixmatch";
+    return {
+      artist_name,
+      track_name,
+      track_id,
+      search_engine,
+      artwork_url,
+      lyrics,
+    };
   }
 }
 
