@@ -1,3 +1,5 @@
+const path = require("path");
+
 const fs = require("fs").promises;
 
 class Musixmatch {
@@ -39,8 +41,8 @@ class Musixmatch {
     const newToken = tokenJson.message.body.user_token;
     const expirationTime = currentTime + 600;
     const tokenData = { user_token: newToken, expiration_time: expirationTime };
-
-    await fs.writeFile(this.tokenFilePath, JSON.stringify(tokenData));
+    const tokenPath = path.join(process.cwd(), this.tokenFilePath);
+    await fs.writeFile(tokenPath, JSON.stringify(tokenData));
 
     return tokenData;
   }
