@@ -1,5 +1,8 @@
+const fs = require("fs").promises;
+
 class Musixmatch {
   constructor() {
+    this.tokenFilePath = "musixmatchSessions.json";
     this.tokenUrl =
       "https://apic-desktop.musixmatch.com/ws/1.1/token.get?app_id=web-desktop-app-v1.0";
     this.searchTermUrl =
@@ -37,20 +40,31 @@ class Musixmatch {
     const expirationTime = currentTime + 600;
     const tokenData = { user_token: newToken, expiration_time: expirationTime };
 
+    await fs.writeFile(this.tokenFilePath, JSON.stringify(tokenData));
+
     return tokenData;
   }
 
-  async checkTokenExpire(tokenData) {
-    const currentTime = Math.floor(Date.now() / 1000);
+  async checkTokenExpire() {
+    try {
+      const tokenData = JSON.parse(await fs.readFile(this.tokenFilePath));
+      const currentTime = Math.floor(Date.now() / 1000);
 
-    if (!tokenData || tokenData.expiration_time < currentTime) {
-      tokenData = await this.getToken();
+      if (!tokenData || tokenData.expiration_time < currentTime) {
+        await this.getToken();
+      }
+    } catch (error) {
+      if (error.code === "ENOENT") {
+        await this.getToken();
+      } else {
+        throw error;
+      }
     }
-    return tokenData;
   }
 
-  async getLyrics(trackId, tokenData) {
-    tokenData = await this.checkTokenExpire(tokenData);
+  async getLyrics(trackId) {
+    await this.checkTokenExpire();
+    const tokenData = JSON.parse(await fs.readFile(this.tokenFilePath));
     const formattedUrl = `${this.lyricsUrl}&track_id=${trackId}&usertoken=${tokenData.user_token}`;
     const result = await this.get(formattedUrl);
     let lyrics = JSON.parse(result).message.body.subtitle.subtitle_body;
@@ -59,29 +73,33 @@ class Musixmatch {
     return lyrics;
   }
 
-  async searchTrack(query, tokenData) {
-    tokenData = await this.checkTokenExpire(tokenData);
+  async searchTrack(query = null) {
+    await this.checkTokenExpire();
+    const tokenData = JSON.parse(await fs.readFile(this.tokenFilePath));
     const formattedUrl = `${this.searchTermUrl}&q_track=${query}&usertoken=${tokenData.user_token}`;
+  
     const result = await this.get(formattedUrl);
     const listResult = JSON.parse(result);
+  
     const data = listResult.message.body.track_list;
-
+  
     if (data.length === 0) {
       throw new Error("No tracks found for the given query.");
     }
-
+  
     const lyricsData = data[0].track;
-    const lyrics = await this.getLyrics(lyricsData.track_id, tokenData);
+    const lyrics = await this.getLyrics(lyricsData.track_id);
     const artist_name = lyricsData.artist_name;
     const track_name = lyricsData.track_name;
     const track_id = lyricsData.track_id;
     const artwork_url = lyricsData.album_coverart_350x350 || null;
-    const search_engine = "Musixmatch";
-    return { artist_name, track_name, track_id, search_engine, artwork_url, lyrics };
+    return { artist_name, track_name, track_id, artwork_url, lyrics, };
   }
+  
 
-  async getLyricsSearch(title, artist = null, tokenData) {
-    tokenData = await this.checkTokenExpire(tokenData);
+  async getLyricsSearch(title, artist = null) {
+    await this.checkTokenExpire();
+    const tokenData = JSON.parse(await fs.readFile(this.tokenFilePath));
     const formattedUrl = `${this.lyricsAlternative}&usertoken=${tokenData.user_token}&q_album=&q_artist=${artist}&q_artists=&track_spotify_id=&q_track=${title}`;
     const result = await this.get(formattedUrl);
     const lyricsData = JSON.parse(result);
@@ -90,15 +108,14 @@ class Musixmatch {
 
     if (data.length === 0) {
       throw new Error("No tracks found for the given query");
-    }
+    } 
 
     const lyrics = data.lyrics_body;
     const track_id = data2.track_id;
     const track_name = data2.track_name;
     const artist_name = data2.artist_name;
     const artwork_url = data2.album_coverart_350x350 || null;
-    const search_engine = "Musixmatch";
-    return { artist_name, track_name, track_id, search_engine , artwork_url, lyrics };
+    return { artist_name, track_name, track_id, artwork_url, lyrics, };
   }
 }
 

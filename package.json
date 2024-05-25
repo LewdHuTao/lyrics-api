@@ -9,11 +9,11 @@
   "author": "LewdHuTao",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.2",
     "cheerio": "^1.0.0-rc.12",
-    "express": "^4.19.2",
-    "fs": "^0.0.1-security"
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shittybot/llyrics-api.git"
