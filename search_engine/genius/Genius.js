@@ -58,6 +58,7 @@ class Genius {
       .split("\n")
       .map((line) => line.trim())
       .filter((line) => line !== "");
+    lyrics = lyrics.join("\n");
 
     return { artist_name, track_name, search_engine, artwork_url, lyrics };
   }

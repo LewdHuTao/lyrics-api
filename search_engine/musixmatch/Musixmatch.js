@@ -40,10 +40,14 @@ class Musixmatch {
     const result = await this.get(formattedUrl);
     let lyrics = JSON.parse(result).message.body.subtitle.subtitle_body;
     lyrics = lyrics.replace(/\[\d+:\d+\.\d+\]/g, "");
-    lyrics = lyrics.trim().split("\n").map(line => line.trim()) .filter(line => line !== ""); 
+    lyrics = lyrics
+      .trim()
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line !== "");
+    lyrics = lyrics.join("\n");
     return lyrics;
-}
-
+  }
 
   async searchTrack(title = null, userToken) {
     const formattedUrl = `${this.searchTermUrl}&q_track=${title}&usertoken=${userToken}`;

@@ -13,7 +13,7 @@ class Youtube {
     const artwork_url = data.thumbnails[1].url;
     const video_id = data.videoId;
     const lyrics_array = await ytm.getLyrics(video_id);
-    const lyrics = lyrics_array.join("\n")
+    const lyrics = lyrics_array.join("\n");
 
     return { artist_name, track_name, search_engine, artwork_url, lyrics };
   }
