@@ -26,7 +26,8 @@ class Genius {
 
     const track_name = data.response.hits[0].result.title;
     const artist_name = data.response.hits[0].result.primary_artist.name;
-    const artwork_url = data.response.hits[0].result.song_art_image_thumbnail_url || null;
+    const artwork_url =
+      data.response.hits[0].result.song_art_image_thumbnail_url || null;
     const search_engine = "Genius";
 
     const lyricsUrl = data.response.hits[0].result.url;
@@ -48,10 +49,15 @@ class Genius {
             .html()
             .replace(/<br>/g, "\n")
             .replace(/<(?!\s*br\s*\/?)[^>]+>/gi, "");
-          lyrics += $("<textarea/>").html(snippet).text().trim() + "\n\n";
+          lyrics += $("<textarea/>").html(snippet).text().trim();
         }
       });
     }
+
+    lyrics = lyrics
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line !== "");
 
     return { artist_name, track_name, search_engine, artwork_url, lyrics };
   }
