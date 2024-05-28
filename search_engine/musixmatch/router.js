@@ -11,38 +11,48 @@ router.use(cookieParser());
 router.get("/musixmatch/lyrics", async (req, res) => {
   const { title } = req.query;
   if (!title) {
-    return res.status(400).send({ error: "Track Title is needed." });
+    return res.status(400).send({
+      messgae: "Song Title is needed for this request.",
+      response: "400 Bad Request",
+    });
   }
   try {
     let userToken = req.cookies.user_token;
     if (!userToken) {
       userToken = await musixmatch.getToken();
-      res.cookie("user_token", userToken); // Set the user token cookie
+      res.cookie("user_token", userToken);
     }
     const tracks = await musixmatch.searchTrack(title, userToken);
     res.send(tracks);
   } catch (error) {
-    res.status(500).send({ error: "Internal Server Error." });
+    res.status(500).send({
+      message: "An error has occured.",
+      response: "500 Internal Server Error",
+    });
   }
 });
 
 router.get("/musixmatch/lyrics-search", async (req, res) => {
   const { title, artist } = req.query;
   if (!title || !artist) {
-    return res
-      .status(400)
-      .send({ error: "Title and artist parameters are required" });
+    return res.status(400).send({
+      messgae: "Song Title is needed for this request.",
+      response: "400 Bad Request",
+    });
   }
   try {
     let userToken = req.cookies.user_token;
     if (!userToken) {
       userToken = await musixmatch.getToken();
-      res.cookie("user_token", userToken); // Set the user token cookie
+      res.cookie("user_token", userToken);
     }
     const response = await musixmatch.getLyricsSearch(title, artist, userToken);
     res.send(response);
   } catch (error) {
-    res.status(500).send({ error: "Internal Server Error." });
+    res.status(500).send({
+      message: "An error has occured.",
+      response: "500 Internal Server Error",
+    });
   }
 });
 
