@@ -29,7 +29,7 @@ Start the server:
 ```bash
 npm start
 
-// you can access to the api on: https://localhost:3000
+// you can access to the api on: http://localhost:3000
 ```
 
 ### Deploy to Vercel
