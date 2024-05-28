@@ -13,7 +13,7 @@ A simple Lyrics Api that can fetch lyrics from various sources like Musixmatch, 
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/lewdhutao/llyrics-api
+    git clone https://github.com/LewdHuTao/lyrics-api
     ```
 
 3. Install dependencies:
