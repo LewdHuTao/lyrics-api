@@ -1,4 +1,5 @@
 const cheerio = require("cheerio");
+const axios = require("axios");
 
 class Genius {
   constructor() {
@@ -7,38 +8,29 @@ class Genius {
 
   async getLyrics(title, api_key = null) {
     try {
-      const res = await fetch(
-        `${this.geniusURL}?q=${encodeURIComponent(title)}`,
-        {
-          headers: {
-            Authorization: `Bearer ${api_key}`,
-          },
-        }
-      );
+      const res = await axios.get(`${this.geniusURL}?q=${encodeURIComponent(title)}`, {
+        headers: {
+          Authorization: `Bearer ${api_key}`,
+        },
+      });
 
-      if (!res.ok) {
-        throw new Error("Error Code: 404 Not Found.");
-      }
-
-      const data = await res.json();
-      if (data.meta.status !== 200 || !data.response.hits.length) {
+      if (!res.data.meta.status === 200 || !res.data.response.hits.length) {
         throw new Error("No lyrics results found.");
       }
 
-      const track_name = data.response.hits[0].result.title;
-      const artist_name = data.response.hits[0].result.primary_artist.name;
-      const artwork_url =
-        data.response.hits[0].result.song_art_image_thumbnail_url || null;
+      const track_name = res.data.response.hits[0].result.title;
+      const artist_name = res.data.response.hits[0].result.primary_artist.name;
+      const artwork_url = res.data.response.hits[0].result.song_art_image_thumbnail_url || null;
       const search_engine = "Genius";
 
-      const lyricsUrl = data.response.hits[0].result.url;
-      const lyricsResponse = await fetch(lyricsUrl);
+      const lyricsUrl = res.data.response.hits[0].result.url;
+      const lyricsResponse = await axios.get(lyricsUrl);
 
-      if (!lyricsResponse.ok) {
+      if (!lyricsResponse.status === 200) {
         throw new Error("No lyrics result found.");
       }
 
-      const lyricsHtml = await lyricsResponse.text();
+      const lyricsHtml = lyricsResponse.data;
       const $ = cheerio.load(lyricsHtml);
       let lyrics = $('div[class="lyrics"]').text().trim();
 
@@ -62,7 +54,7 @@ class Genius {
       lyrics = lyrics.join("\n");
 
       return { artist_name, track_name, search_engine, artwork_url, lyrics };
-    } catch {
+    } catch (error) {
       return { message: "No lyrics were found.", response: "404 Not Found" };
     }
   }
