@@ -1,10 +1,15 @@
 const express = require("express");
 const Genius = require("./Genius");
 const router = express.Router();
+const path = require("path");
 
 const genius = new Genius();
 
 router.use(express.json());
+
+router.get("/genius", async (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 
 router.get("/genius/lyrics", async (req, res) => {
   const { title, api_key } = req.query;

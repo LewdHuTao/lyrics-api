@@ -1,10 +1,15 @@
 const express = require("express");
 const Youtube = require("./Youtube");
 const router = express.Router();
+const path = require("path");
 
 const yoututbe = new Youtube();
 
 router.use(express.json());
+
+router.get("/youtube", async (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"))
+})
 
 router.get("/youtube/lyrics", async (req, res) => {
   const { title } = req.query;

@@ -2,11 +2,16 @@ const express = require("express");
 const router = express.Router();
 const Musixmatch = require("./Musixmatch");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 const musixmatch = new Musixmatch();
 
 router.use(express.json());
 router.use(cookieParser());
+
+router.get("/musixmatch", async (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"))
+}) 
 
 router.get("/musixmatch/lyrics", async (req, res) => {
   const { title } = req.query;
