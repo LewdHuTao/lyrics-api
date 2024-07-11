@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lyrics API - Genius</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css"
+        rel="stylesheet">
     <style>
         body {
             background-color: #121212;
@@ -64,14 +65,19 @@
     <div class="container mt-5">
         <section class="mt-5" id="introduction">
             <h2>Introduction</h2>
-            <p>The Lyrics API allows you to fetch song lyrics easily from Genius. You can use it to integrate lyrics into your applications.</p>
+            <p>The Lyrics API allows you to fetch song lyrics easily from Genius. You can use it to integrate lyrics
+                into your applications.</p>
         </section>
 
         <section class="mt-5" id="get_started">
             <h2>Getting Started</h2>
-            <p>Welcome to the Lyrics API! Our service offers a comprehensive collection of song lyrics from Genius. Whether you're building a music app, website, or just curious about song lyrics, our API has you covered.</p>
-            <p>The best part? Our Lyrics API is completely free to use! However, for accessing lyrics from Genius, you'll need to sign up for a Genius API key from the Genius Website.</p>
-            <p>Get started with our API now and explore our documentation to discover the available endpoints and start integrating lyrics into your projects today.</p>
+            <p>Welcome to the Lyrics API! Our service offers a comprehensive collection of song lyrics from Genius.
+                Whether you're building a music app, website, or just curious about song lyrics, our API has you
+                covered.</p>
+            <p>The best part? Our Lyrics API is completely free to use! However, for accessing lyrics from Genius,
+                you'll need to sign up for a Genius API key from the Genius Website.</p>
+            <p>Get started with our API now and explore our documentation to discover the available endpoints and start
+                integrating lyrics into your projects today.</p>
         </section>
 
         <section class="mt-5" id="source">
@@ -95,7 +101,8 @@
                 <li><code>api_key</code> (string): Genius API Key.</li>
             </ul>
             <p>Example Request:</p>
-            <pre class="px-2 py-1 rounded"><code><span class="text-info">GET</span> https://lyrics.lewdhutao.my.eu.org/genius/lyrics?title={song_title}&api_key={genius_key}</code></pre>
+            <pre
+                class="px-2 py-1 rounded"><code><span class="text-info">GET</span> <span id="apiUrl"></span>/genius/lyrics?title={song_title}&api_key={genius_key}</code></pre>
             <p>Example Response:</p>
             <pre class="px-2 py-2 rounded"><code>{
     "artist_name": "Ariana Grande",
@@ -127,6 +134,15 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function getDomain() {
+            const domain = window.location.origin;
+            const apiUrlElement = document.getElementById('apiUrl');
+            apiUrlElement.textContent = domain;
+        }
+
+        getDomain();
+    </script>
     <script>
         function toggleTheme() {
             document.body.classList.toggle('light-theme');

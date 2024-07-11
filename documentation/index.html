@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lyrics API</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css"
+        rel="stylesheet">
     <style>
         body {
             background-color: #121212;
@@ -103,7 +104,7 @@
             </ul>
             <p>Example Request:</p>
             <pre
-                class="px-2 py-1 rounded"><code><span class="text-info">GET</span> https://lyrics.lewdhutao.my.eu.org/musixmatch/lyrics?title={song_title}</code></pre>
+                class="px-2 py-1 rounded apiUrlPlaceholder"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/musixmatch/lyrics?title={song_title}</code></pre>
             <p>Example Response:</p>
             <pre class="px-2 py-2 rounded"><code>{
     "artist_name": "The Weeknd",
@@ -125,7 +126,7 @@
 
             <p>Example Request:</p>
             <pre
-                class="px-2 py-1 rounded"><code><span class="text-info">GET</span> https://lyrics.lewdhutao.my.eu.org/musixmatch/lyrics?title={song_title}&artist={artist_name}</code></pre>
+                class="px-2 py-1 rounded apiUrlPlaceholder"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/musixmatch/lyrics?title={song_title}&artist={artist_name}</code></pre>
             <p>Example Response:</p>
             <pre class="px-2 py-2 rounded"><code>{
     "artist_name": "Rihanna",
@@ -149,7 +150,7 @@
             </ul>
             <p>Example Request:</p>
             <pre
-                class="px-2 py-1 rounded"><code><span class="text-info">GET</span> https://lyrics.lewdhutao.my.eu.org/genius/lyrics?title={song_title}&api_key={genius_key}</code></pre>
+                class="px-2 py-1 rounded apiUrlPlaceholder"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/genius/lyrics?title={song_title}&api_key={genius_key}</code></pre>
             <p>Example Response:</p>
             <pre class="px-2 py-2 rounded"><code>{
     "artist_name": "Ariana Grande",
@@ -171,7 +172,7 @@
             </ul>
             <p>Example Request:</p>
             <pre
-                class="px-2 py-1 rounded"><code><span class="text-info">GET</span> https://lyrics.lewdhutao.my.eu.org/youtube/lyrics?title={song_title}</code></pre>
+                class="px-2 py-1 rounded apiUrlPlaceholder"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/youtube/lyrics?title={song_title}</code></pre>
             <p>Example Response:</p>
             <pre class="px-2 py-2 rounded"><code>{
     "artist_name": "Rick Astley",
@@ -203,6 +204,18 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function setDomain() {
+            const domain = window.location.origin;
+            const apiUrlElements = document.querySelectorAll('.apiUrl');
+            apiUrlElements.forEach(element => {
+                element.textContent = domain;
+            });
+        }
+
+        setDomain();
+    </script>
+
     <script>
         function toggleTheme() {
             document.body.classList.toggle('light-theme');
