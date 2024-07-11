@@ -3,7 +3,7 @@ const Youtube = require("./Youtube");
 const router = express.Router();
 const path = require("path");
 
-const yoututbe = new Youtube();
+const youtube = new Youtube();
 
 router.use(express.json());
 
@@ -21,7 +21,7 @@ router.get("/youtube/lyrics", async (req, res) => {
   }
 
   try {
-    const tracks = await yoututbe.getLyrics(title);
+    const tracks = await youtube.getLyrics(title);
     res.send(tracks);
   } catch (error) {
     res.status(500).send({
