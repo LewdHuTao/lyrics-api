@@ -16,7 +16,7 @@
     "express": "^4.19.2",
     "path": "^0.12.7",
     "useragent": "^2.3.0",
-    "ytmusic-api": "^5.2.1"
+    "ytmusic-api": "^5.2.2"
   },
   "repository": {
     "type": "git",
