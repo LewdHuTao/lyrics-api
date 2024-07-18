@@ -3,7 +3,7 @@ const YTMusic = require("ytmusic-api");
 class Youtube {
   async getLyrics(title = null) {
     let ytm;
-    
+
     try {
       ytm = new YTMusic.default();
       await ytm.initialize();
@@ -24,9 +24,9 @@ class Youtube {
       const lyrics = lyrics_array.join("\n");
 
       return { artist_name, track_name, search_engine, artwork_url, lyrics };
-    } catch (error) {
+    } catch {
       return {
-        message: "No lyrics were found." + error,
+        message: "No lyrics were found.",
         response: "404 Not Found",
       };
     }
