@@ -2,17 +2,10 @@ const YTMusic = require("ytmusic-api");
 
 class Youtube {
   async getLyrics(title = null) {
-    let ytm;
-
     try {
-      ytm = new YTMusic.default();
+      const ytm = new YTMusic();
       await ytm.initialize();
-    } catch {
-      ytm = new YTMusic();
-      await ytm.initialize();
-    }
 
-    try {
       const song = await ytm.searchSongs(title);
       const data = song[0];
       const artist_name = data.artist.name;
