@@ -3,7 +3,7 @@ const YTMusic = require("ytmusic-api");
 class Youtube {
   async getLyrics(title = null) {
     try {
-      const ytm = new YTMusic.default();
+      const ytm = new YTMusic();
       await ytm.initialize();
 
       const song = await ytm.searchSongs(title);
