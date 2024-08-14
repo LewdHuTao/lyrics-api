@@ -1,18 +1,19 @@
-const express = require("express");
-const Genius = require("./Genius");
-const router = express.Router();
-const path = require("path");
+import express, { Request, Response, Router } from 'express';
+import path from "path";
+import Genius from './Genius';
 
 const genius = new Genius();
+const router: Router = express.Router();
 
 router.use(express.json());
 
-router.get("/genius", async (req, res) => {
+router.get("/genius", async (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-router.get("/genius/lyrics", async (req, res) => {
-  const { title, api_key } = req.query;
+router.get("/genius/lyrics", async (req: Request, res: Response) => {
+  const title = req.query.title as string | undefined;
+  const api_key = req.query.api_key as string | undefined
   if (!title) {
     return res
       .status(400)
@@ -43,4 +44,4 @@ router.get("/genius/lyrics", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
