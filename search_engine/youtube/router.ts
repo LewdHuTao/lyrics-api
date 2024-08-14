@@ -1,0 +1,36 @@
+import express, { Response, Request, Router } from "express";
+import path from "path";
+import Youtube from "./Youtube";
+
+const youtube = new Youtube();
+const router: Router = express.Router();
+
+router.use(express.json());
+
+router.get("/youtube", (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
+router.get("/youtube/lyrics", async (req: Request, res: Response) => {
+  const title = req.query.title as string | undefined;
+
+  if (!title) {
+    return res.status(400).send({
+      message: "Song Title is needed for this request.",
+      response: "400 Bad Request",
+    });
+  }
+
+  try {
+    const tracks = await youtube.getLyrics(title);
+    res.send(tracks);
+  } catch (error) {
+    console.error("Error fetching lyrics:", error);
+    res.status(500).send({
+      message: "An error has occurred.",
+      response: "500 Internal Server Error",
+    });
+  }
+});
+
+export default router;
