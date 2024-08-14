@@ -8,6 +8,12 @@ interface TrackInfo {
 }
 
 interface TrackData {
+  track: {
+    track_id: string;
+    track_name: string;
+    artist_name: string;
+    album_coverart_350x350: string | null;
+  },
   track_id: string;
   track_name: string;
   artist_name: string;
@@ -109,11 +115,6 @@ class Musixmatch {
       const listResult: SearchResult = JSON.parse(result);
 
       const data = listResult.message.body.track_list;
-
-      if (data.length === 0) {
-        return { message: "No tracks found for the given query.", response: "404 Not Found" };
-      }
-
       const lyricsData = data[0].track;
       const lyrics = await this.getLyrics(lyricsData.track_id, userToken);
       const artist_name = lyricsData.artist_name;
@@ -131,28 +132,25 @@ class Musixmatch {
         lyrics,
       };
     } catch (error) {
-      console.error("Error searching track:", error);
       return { message: "No lyrics were found.", response: "404 Not Found" };
     }
   }
 
-  async getLyricsSearch(title: string, artist: string | null, userToken: string): Promise<MusixmatchResponse> {
+  async getLyricsSearch(title: string, artist: string, userToken: string): Promise<MusixmatchResponse> {
     try {
       const formattedUrl = `${this.lyricsAlternative}&usertoken=${userToken}&q_album=&q_artist=${artist}&q_artists=&track_spotify_id=&q_track=${title}`;
       const result = await this.get(formattedUrl);
+
       const lyricsData: AlternativeLyricsResponse = JSON.parse(result);
-      const data = lyricsData.message.body.macro_calls["track.lyrics.get"].message.body.lyrics;
-      const data2 = lyricsData.message.body.macro_calls["matcher.track.get"].message.body;
 
-      if (!data.lyrics_body) {
-        return { message: "No lyrics found for the given query.", response: "404 Not Found" };
-      }
+      const trackLyrics = lyricsData.message.body.macro_calls["track.lyrics.get"];
+      const trackInfo = lyricsData.message.body.macro_calls["matcher.track.get"].message.body.track;
 
-      const lyrics = data.lyrics_body;
-      const track_id = data2.track_id;
-      const track_name = data2.track_name;
-      const artist_name = data2.artist_name;
-      const artwork_url = data2.album_coverart_350x350 || null;
+      const lyrics = trackLyrics.message.body.lyrics.lyrics_body;
+      const track_id = trackInfo.track_id;
+      const track_name = trackInfo.track_name;
+      const artist_name = trackInfo.artist_name;
+      const artwork_url = trackInfo.album_coverart_350x350 || null;
       const search_engine = "Musixmatch";
 
       return {
@@ -164,7 +162,6 @@ class Musixmatch {
         lyrics,
       };
     } catch (error) {
-      console.error("Error getting lyrics search:", error);
       return { message: "No lyrics were found.", response: "404 Not Found" };
     }
   }
