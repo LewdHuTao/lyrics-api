@@ -109,6 +109,28 @@
     "artwork_url": "https://image.url/xyz.png",
     "lyrics": "Look at the stars, Look how they shine for you ..."
 }</code></pre>
+
+            <h4 class="mt-5">For More Accurate Lyrics Results</h4>
+            <p>Endpoint: <code>/musixmatch/lyrics-search</code></p>
+            <p>Method: <code>GET</code></p>
+            <p>Parameters:</p>
+            <ul>
+                <li><code>title</code> (string): The search query (song title).</li>
+                <li><code>artist</code> (string): The artist's name for the song.</li>
+            </ul>
+
+            <p>Example Request:</p>
+            <pre
+                class="px-2 py-1 rounded apiUrlPlaceholder"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/musixmatch/lyrics-search?title={song_title}&artist={artist_name}</code></pre>
+            <p>Example Response:</p>
+            <pre class="px-2 py-2 rounded"><code>{
+    "artist_name": "Rihanna",
+    "track_name": "Diamonds",
+    "track_id": 84458341,
+    "search_engine": "Musixmatch",
+    "artwork_url": "https://s.mxmcdn.net/images-storage/albums2/1/0/4/7/5/4/40457401_350_350.jpg",
+    "lyrics": "Shine bright like a diamond ..."
+}</code></pre>
         </section>
 
         <section class="my-5" id="response_code">
