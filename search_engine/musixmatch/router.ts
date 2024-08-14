@@ -1,23 +1,24 @@
-const express = require("express");
-const router = express.Router();
-const Musixmatch = require("./Musixmatch");
-const cookieParser = require("cookie-parser");
-const path = require("path");
+import express, { Response, Request, Router } from "express";
+import cookieParser from "cookie-parser";
+import path from "path";
+import Musixmatch from "./Musixmatch";
+
 
 const musixmatch = new Musixmatch();
+const router: Router = express.Router();
 
 router.use(express.json());
 router.use(cookieParser());
 
-router.get("/musixmatch", async (req, res) => {
+router.get("/musixmatch", async (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "index.html"))
 }) 
 
-router.get("/musixmatch/lyrics", async (req, res) => {
-  const { title } = req.query;
+router.get("/musixmatch/lyrics", async (req: Request, res: Response) => {
+  const title = req.query.title as string | undefined;
   if (!title) {
     return res.status(400).send({
-      messgae: "Song Title is needed for this request.",
+      message: "Song Title is needed for this request.",
       response: "400 Bad Request",
     });
   }
@@ -37,11 +38,12 @@ router.get("/musixmatch/lyrics", async (req, res) => {
   }
 });
 
-router.get("/musixmatch/lyrics-search", async (req, res) => {
-  const { title, artist } = req.query;
+router.get("/musixmatch/lyrics-search", async (req: Request, res: Response) => {
+  const title = req.query.title as string | undefined;
+  const artist = req.query.artist as string | undefined;
   if (!title || !artist) {
     return res.status(400).send({
-      messgae: "Song Title is needed for this request.",
+      message: "Song Title is needed for this request.",
       response: "400 Bad Request",
     });
   }
@@ -61,4 +63,4 @@ router.get("/musixmatch/lyrics-search", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
