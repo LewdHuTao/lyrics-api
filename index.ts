@@ -1,16 +1,16 @@
-const express = require("express");
-const path = require("path");
-const useragent = require("useragent");
-const colors = require("colors");
+import express, { Request, Response, NextFunction } from "express"
+import path from "path";
+import useragent from "useragent";
+import colors from "colors";
 
-const musixmatch = require("./search_engine/musixmatch/router");
-const genius = require("./search_engine/genius/router");
-const youtube = require("./search_engine/youtube/router");
+import musixmatch from "./search_engine/musixmatch/router";
+import genius from "./search_engine/genius/router";
+import youtube from "./search_engine/youtube/router";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-function logDetails(req, res, next) {
+function logDetails(req: Request, res: Response, next: NextFunction) {
   const currentTime = new Date().toISOString();
   const agent = useragent.parse(req.headers["user-agent"]);
   const browserDetails = `${agent.toAgent()} on ${agent.os}`;
