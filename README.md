@@ -27,7 +27,7 @@ A simple Lyrics Api that can fetch lyrics from various sources like Musixmatch, 
 Start the server:
 
 ```bash
-npm start
+npm run start
 
 // you can access to the api on: http://localhost:3000
 ```
