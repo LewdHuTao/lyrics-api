@@ -6,28 +6,28 @@ A simple Lyrics Api that can fetch lyrics from various sources like Musixmatch, 
 
 ### Prerequisites
 
-- [Node.js Version 18+](https://nodejs.org/) 
+- [Node.js Version 18+](https://nodejs.org/)
 
 ### Installation
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/LewdHuTao/lyrics-api
-    ```
+   ```bash
+   git clone https://github.com/LewdHuTao/lyrics-api
+   ```
 
-3. Install dependencies:
+2. Install dependencies:
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 ### Running the API
 
 Start the server:
 
 ```bash
-npm start
+npm run start
 
 // you can access to the api on: http://localhost:3000
 ```
