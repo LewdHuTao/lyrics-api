@@ -1,4 +1,4 @@
-import YTMusic from "ytmusic-api";
+import YTMusic from 'ytmusic-api';
 
 interface SongData {
   artist: { name: string };
@@ -30,18 +30,18 @@ class Youtube {
       const data = song[0];
       const artist_name = data.artist.name;
       const track_name = data.name;
-      const search_engine = "YouTube";
+      const search_engine = 'YouTube';
       const artwork_url = data.thumbnails[1].url;
       const video_id = data.videoId;
-      const lyrics_array = await ytm.getLyrics(video_id) as string[];
-      const lyrics = lyrics_array.join("\n");
+      const lyrics_array = (await ytm.getLyrics(video_id)) as string[];
+      const lyrics = lyrics_array.join('\n');
 
       return { artist_name, track_name, search_engine, artwork_url, lyrics };
     } catch (error) {
-      console.error("Error fetching lyrics:", error);
+      console.error('Error fetching lyrics:', error);
       return {
-        message: "No lyrics were found.",
-        response: "404 Not Found",
+        message: 'No lyrics were found.',
+        response: '404 Not Found',
       };
     }
   }

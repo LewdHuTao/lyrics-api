@@ -5,7 +5,10 @@
   "main": "index.ts",
   "scripts": {
     "start": "ts-node index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier --write .",
+    "lint": "eslint src --ext .ts",
+    "docs": "ts-docs",
+    "fix": "eslint src --ext .ts --fix"
   },
   "author": "LewdHuTao",
   "license": "ISC",

@@ -13,7 +13,7 @@ interface TrackData {
     track_name: string;
     artist_name: string;
     album_coverart_350x350: string | null;
-  },
+  };
   track_id: string;
   track_name: string;
   artist_name: string;
@@ -49,8 +49,8 @@ interface AlternativeLyricsResponse {
   message: {
     body: {
       macro_calls: {
-        "track.lyrics.get": { message: { body: { lyrics: { lyrics_body: string } } } };
-        "matcher.track.get": { message: { body: TrackData } };
+        'track.lyrics.get': { message: { body: { lyrics: { lyrics_body: string } } } };
+        'matcher.track.get': { message: { body: TrackData } };
       };
     };
   };
@@ -64,17 +64,20 @@ interface ErrorResponse {
 type MusixmatchResponse = TrackInfo | ErrorResponse;
 
 class Musixmatch {
-  private tokenUrl = "https://apic-desktop.musixmatch.com/ws/1.1/token.get?app_id=web-desktop-app-v1.0";
-  private searchTermUrl = "https://apic-desktop.musixmatch.com/ws/1.1/track.search?app_id=web-desktop-app-v1.0&page_size=5&page=1&s_track_rating=desc&quorum_factor=1.0";
-  private lyricsUrl = "https://apic-desktop.musixmatch.com/ws/1.1/track.subtitle.get?app_id=web-desktop-app-v1.0&subtitle_format=lrc";
-  private lyricsAlternative = "https://apic-desktop.musixmatch.com/ws/1.1/macro.subtitles.get?format=json&namespace=lyrics_richsynched&subtitle_format=mxm&app_id=web-desktop-app-v1.0";
+  private tokenUrl = 'https://apic-desktop.musixmatch.com/ws/1.1/token.get?app_id=web-desktop-app-v1.0';
+  private searchTermUrl =
+    'https://apic-desktop.musixmatch.com/ws/1.1/track.search?app_id=web-desktop-app-v1.0&page_size=5&page=1&s_track_rating=desc&quorum_factor=1.0';
+  private lyricsUrl =
+    'https://apic-desktop.musixmatch.com/ws/1.1/track.subtitle.get?app_id=web-desktop-app-v1.0&subtitle_format=lrc';
+  private lyricsAlternative =
+    'https://apic-desktop.musixmatch.com/ws/1.1/macro.subtitles.get?format=json&namespace=lyrics_richsynched&subtitle_format=mxm&app_id=web-desktop-app-v1.0';
 
   private async get(url: string): Promise<string> {
     const response = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        authority: "apic-desktop.musixmatch.com",
-        cookie: "AWSELBCORS=0; AWSELB=0;",
+        authority: 'apic-desktop.musixmatch.com',
+        cookie: 'AWSELBCORS=0; AWSELB=0;',
       },
     });
     if (!response.ok) {
@@ -99,13 +102,13 @@ class Musixmatch {
     const result = await this.get(formattedUrl);
     const lyricsJson: LyricsResponse = JSON.parse(result);
     let lyrics = lyricsJson.message.body.subtitle.subtitle_body;
-    lyrics = lyrics.replace(/\[\d+:\d+\.\d+\]/g, "");
+    lyrics = lyrics.replace(/\[\d+:\d+\.\d+\]/g, '');
     return lyrics
       .trim()
-      .split("\n")
+      .split('\n')
       .map((line) => line.trim())
-      .filter((line) => line !== "")
-      .join("\n");
+      .filter((line) => line !== '')
+      .join('\n');
   }
 
   async searchTrack(title: string, userToken: string): Promise<MusixmatchResponse> {
@@ -121,7 +124,7 @@ class Musixmatch {
       const track_name = lyricsData.track_name;
       const track_id = lyricsData.track_id;
       const artwork_url = lyricsData.album_coverart_350x350 || null;
-      const search_engine = "Musixmatch";
+      const search_engine = 'Musixmatch';
 
       return {
         artist_name,
@@ -132,7 +135,7 @@ class Musixmatch {
         lyrics,
       };
     } catch (error) {
-      return { message: "No lyrics were found.", response: "404 Not Found" };
+      return { message: 'No lyrics were found.', response: '404 Not Found' };
     }
   }
 
@@ -143,15 +146,15 @@ class Musixmatch {
 
       const lyricsData: AlternativeLyricsResponse = JSON.parse(result);
 
-      const trackLyrics = lyricsData.message.body.macro_calls["track.lyrics.get"];
-      const trackInfo = lyricsData.message.body.macro_calls["matcher.track.get"].message.body.track;
+      const trackLyrics = lyricsData.message.body.macro_calls['track.lyrics.get'];
+      const trackInfo = lyricsData.message.body.macro_calls['matcher.track.get'].message.body.track;
 
       const lyrics = trackLyrics.message.body.lyrics.lyrics_body;
       const track_id = trackInfo.track_id;
       const track_name = trackInfo.track_name;
       const artist_name = trackInfo.artist_name;
       const artwork_url = trackInfo.album_coverart_350x350 || null;
-      const search_engine = "Musixmatch";
+      const search_engine = 'Musixmatch';
 
       return {
         artist_name,
@@ -162,7 +165,7 @@ class Musixmatch {
         lyrics,
       };
     } catch (error) {
-      return { message: "No lyrics were found.", response: "404 Not Found" };
+      return { message: 'No lyrics were found.', response: '404 Not Found' };
     }
   }
 }
