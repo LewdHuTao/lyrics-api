@@ -2,6 +2,7 @@ import express, { Response, Request, Router } from 'express';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import Musixmatch from './Musixmatch';
+import log from '../../utils/logger';
 
 const musixmatch = new Musixmatch();
 const router: Router = express.Router();
@@ -30,6 +31,7 @@ router.get('/musixmatch/lyrics', async (req: Request, res: Response) => {
     const tracks = await musixmatch.searchTrack(title, userToken);
     res.send(tracks);
   } catch (error) {
+    log.error(`Error: ${error as string}`);
     res.status(500).send({
       message: 'An error has occured.',
       response: '500 Internal Server Error',
@@ -55,6 +57,7 @@ router.get('/musixmatch/lyrics-search', async (req: Request, res: Response) => {
     const response = await musixmatch.getLyricsSearch(title, artist, userToken);
     res.send(response);
   } catch (error) {
+    log.error(`Error: ${error as string}`);
     res.status(500).send({
       message: 'An error has occured.',
       response: '500 Internal Server Error',

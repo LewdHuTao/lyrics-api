@@ -1,4 +1,5 @@
 import YTMusic from 'ytmusic-api';
+import log from '../../utils/logger';
 
 interface SongData {
   artist: { name: string };
@@ -38,7 +39,7 @@ class Youtube {
 
       return { artist_name, track_name, search_engine, artwork_url, lyrics };
     } catch (error) {
-      console.error('Error fetching lyrics:', error);
+      log.error(`Error: ${error as string}`);
       return {
         message: 'No lyrics were found.',
         response: '404 Not Found',

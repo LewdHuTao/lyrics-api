@@ -1,6 +1,7 @@
 import express, { Response, Request, Router } from 'express';
 import path from 'path';
 import Youtube from './Youtube';
+import log from '../../utils/logger';
 
 const youtube = new Youtube();
 const router: Router = express.Router();
@@ -25,7 +26,7 @@ router.get('/youtube/lyrics', async (req: Request, res: Response) => {
     const tracks = await youtube.getLyrics(title);
     res.send(tracks);
   } catch (error) {
-    console.error('Error fetching lyrics:', error);
+    log.error(`Error: ${error as string}`);
     res.status(500).send({
       message: 'An error has occurred.',
       response: '500 Internal Server Error',

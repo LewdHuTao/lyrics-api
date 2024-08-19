@@ -1,3 +1,5 @@
+import log from "../../utils/logger";
+
 interface TrackInfo {
   artist_name: string;
   track_name: string;
@@ -135,6 +137,7 @@ class Musixmatch {
         lyrics,
       };
     } catch (error) {
+      log.error(`Error: ${error as string}`);
       return { message: 'No lyrics were found.', response: '404 Not Found' };
     }
   }
@@ -165,6 +168,7 @@ class Musixmatch {
         lyrics,
       };
     } catch (error) {
+      log.error(`Error: ${error as string}`);
       return { message: 'No lyrics were found.', response: '404 Not Found' };
     }
   }

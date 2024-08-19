@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from 'express';
 import path from 'path';
 import Genius from './Genius';
+import log from '../../utils/logger';
 
 const genius = new Genius();
 const router: Router = express.Router();
@@ -31,6 +32,7 @@ router.get('/genius/lyrics', async (req: Request, res: Response) => {
     const tracks = await genius.getLyrics(title, api_key);
     res.send(tracks);
   } catch (error) {
+    log.error(`Error: ${error as string}`);
     res.status(500).send({
       message: 'An error has occured.',
       response: '500 Internal Server Error',

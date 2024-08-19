@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio';
+import log from "../../utils/logger";
 
 interface LyricsResponse {
   artist_name: string;
@@ -75,6 +76,7 @@ class Genius {
 
       return { artist_name, track_name, search_engine, artwork_url, lyrics };
     } catch (error) {
+      log.error(`Error: ${error as string}`);
       return { message: 'No lyrics were found.', response: '404 Not Found' };
     }
   }
