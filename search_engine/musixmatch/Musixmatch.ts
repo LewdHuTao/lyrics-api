@@ -74,7 +74,12 @@ class Musixmatch {
   private lyricsAlternative =
     'https://apic-desktop.musixmatch.com/ws/1.1/macro.subtitles.get?format=json&namespace=lyrics_richsynched&subtitle_format=mxm&app_id=web-desktop-app-v1.0';
 
-  private async get(url: string): Promise<string> {
+  private delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  private async get(url: string, delayMs = 1000): Promise<string> {
+    await this.delay(delayMs);
     const response = await fetch(url, {
       method: 'GET',
       headers: {
