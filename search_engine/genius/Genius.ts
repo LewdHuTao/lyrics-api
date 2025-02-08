@@ -22,11 +22,12 @@ class Genius {
       const res = await fetch(`${this.geniusURL}?q=${encodeURIComponent(title)}`, {
         headers: {
           Authorization: `Bearer ${api_key}`,
+          'User-Agent': 'Mozilla/5.0',
         },
       });
 
       if (!res.ok) {
-        throw new Error('Error Code: 404 Not Found.');
+        throw new Error(`Genius API error: ${res.statusText}`);
       }
 
       const data = await res.json();
@@ -41,7 +42,9 @@ class Genius {
       const search_engine = 'Genius';
 
       const lyricsUrl = result.url;
-      const lyricsResponse = await fetch(lyricsUrl);
+      const lyricsResponse = await fetch(lyricsUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0' },
+      });
 
       if (!lyricsResponse.ok) {
         throw new Error('No lyrics result found.');
@@ -49,34 +52,25 @@ class Genius {
 
       const lyricsHtml = await lyricsResponse.text();
       const $ = cheerio.load(lyricsHtml);
-      let lyrics = $('div[class="lyrics"]').text().trim();
+      let lyrics = '';
+
+      $('div[data-lyrics-container="true"]').each((_, elem) => {
+        const snippet = $(elem)
+          .html()
+          ?.replace(/<br\s*\/?>/g, '\n')
+          .replace(/<(?!br\s*\/?)[^>]+>/gi, '')
+          .trim();
+
+        if (snippet) lyrics += snippet + '\n\n';
+      });
 
       if (!lyrics) {
-        lyrics = '';
-        $('div[class^="Lyrics__Container"]').each((i, elem) => {
-          if (elem) {
-            const elementText = $(elem).text();
-            if (elementText.length !== 0) {
-              const snippet =
-                $(elem)
-                  .html()
-                  ?.replace(/<br>/g, '\n')
-                  .replace(/<(?!\s*br\s*\/?)[^>]+>/gi, '') || '';
-              lyrics += $('<textarea/>').html(snippet).text().trim();
-            }
-          }
-        });
+        throw new Error('Lyrics could not be extracted.');
       }
 
-      lyrics = lyrics
-        .split('\n')
-        .map((line) => line.trim())
-        .filter((line) => line !== '')
-        .join('\n');
-
-      return { artist_name, track_name, search_engine, artwork_url, lyrics };
+      return { artist_name, track_name, search_engine, artwork_url, lyrics: lyrics.trim() };
     } catch (error) {
-      log.error(`Error: ${error as string}`);
+      log.error(`Error: ${error instanceof Error ? error.message : String(error)}`);
       return { message: 'No lyrics were found.', response: '404 Not Found' };
     }
   }
