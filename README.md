@@ -148,3 +148,7 @@ npm run start
 ### Deploy to Vercel
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FLewdHuTao%2Fllyrics-api)
+
+### Public API
+
+Visit `https://lyrics.lewdhutao.my.eu.org/` to access the public API. Some search engine like Genius might not work as the API is host in Vercel and it seems like Vercel IP is now blocked from accessing Genius API.
