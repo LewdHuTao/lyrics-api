@@ -61,7 +61,7 @@ class Genius {
           .replace(/<(?!br\s*\/?)[^>]+>/gi, '')
           .trim();
 
-        if (snippet) lyrics += snippet + '\n\n';
+        if (snippet) lyrics += snippet + "\n\n";
       });
 
       if (!lyrics) {
