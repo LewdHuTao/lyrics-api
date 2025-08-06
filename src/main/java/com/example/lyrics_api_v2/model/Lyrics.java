@@ -20,23 +20,18 @@ public class Lyrics {
     public String getArtistName() {
         return artistName;
     }
-
     public String getTrackName() {
         return trackName;
     }
-
     public String getTrackId() {
         return trackId;
     }
-
     public String getSearchEngine() {
         return searchEngine;
     }
-
     public String getArtworkUrl() {
         return artworkUrl;
     }
-
     public String getLyrics() {
         return lyrics;
     }

@@ -14,11 +14,9 @@ public class LyricsNotFound {
     public String getMessage() {
         return message;
     }
-
     public String getRespone() {
         return respone;
     }
-
     public int getCode() {
         return code;
     }
