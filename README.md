@@ -1,154 +1,142 @@
 # Lyrics API
 
-A simple Lyrics Api that can fetch lyrics from various sources like Musixmatch, Genius, and YouTube.
+A simple lyrics API that fetches lyrics from sources like Musixmatch and YouTube Music.
+
+---
+
+## ❗ V1 API Deprecated
+
+> **The `/v1` endpoints are deprecated and no longer maintained.**  
+> While they may still function, they will not receive bug fixes, updates, or support.  
+> Please migrate to `/v2` endpoints for improved accuracy, speed, and stability.
+
+---
 
 ## Getting Started
 
-### Prerequisites
+### Requirements
 
-- [Node.js Version 18+](https://nodejs.org/)
+- Node.js 18 or higher
 
 ### Installation
 
-1. Clone the repository:
+```bash
+git clone https://github.com/lewdhutao/lyrics-api
+cd lyrics-api
+npm install
+```
 
-   ```bash
-   git clone https://github.com/LewdHuTao/lyrics-api
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-### Running the API
-
-Start the server:
+### Running
 
 ```bash
-npm run start
-
-// you can access to the api on: http://localhost:3000
+npm start
 ```
 
-## Endpoint:
-`/musixmatch/lyrics`
+Once running, open: `http://localhost:3000`
 
-### Method:
-`GET`
+---
 
-### Parameters:
-`title` (string): The search query (song title).
+## API Endpoints
 
-### Example Request:
-`GET /musixmatch/lyrics?title={song_title}`
+### `/v2/musixmatch/lyrics`
 
-### Example Response:
+Search for lyrics using Musixmatch.
+
+**Method:** `GET`
+
+**Query Parameters:**
+- `title` (required): Song title
+- `artist` (optional): Artist name
+
+**Examples:**
 
 ```
+GET /v2/musixmatch/lyrics?title=back%20to%20friends
+GET /v2/musixmatch/lyrics?title=back%20to%20friends&artist=sombr
+```
+
+---
+
+### `/v2/youtube/lyrics`
+
+Search for lyrics using YouTube Music.
+
+**Method:** `GET`
+
+**Query Parameters:**
+- `title` (required): Song title
+- `artist` (optional): Artist name
+
+**Examples:**
+
+```
+GET /v2/youtube/lyrics?title=back%20to%20friends
+GET /v2/youtube/lyrics?title=back%20to%20friends&artist=sombr
+```
+
+---
+
+## Example JSON Response
+
+```json
 {
-"artist_name": "The Weeknd",
-"track_name": "After Hours",
-"track_id": 194169155,
-"search_engine": "Musixmatch",
-"artwork_url": "https://s.mxmcdn.net/images-storage/albums2/7/2/8/7/3/3/48337827_350_350.jpg",
-"lyrics": "Thought I almost died in my dream again (baby, almost died) ..."
+  "data": {
+    "artistName": "Sombr",
+    "trackName": "Back to Friends",
+    "trackId": "dbEY-JVHJWg",
+    "searchEngine": "YouTube",
+    "artworkUrl": "https://example.com/art.jpg",
+    "lyrics": "Touch my body tender\n'Cause the feeling makes me weak..."
+  },
+  "metadata": {
+    "apiVersion": "2.0"
+  }
 }
 ```
 
-## Endpoint:
-`/musixmatch/lyrics-search`
+---
 
-### Method:
-`GET`
+## Deprecated v1 Endpoints
 
-### Parameters:
-`title` (string): The search query (song title).
+These are no longer maintained and may stop working at any time:
 
-`artist` (string): The artist's name for the song.
+- `/v1/musixmatch/lyrics`
+- `/v1/youtube/lyrics`
+- `/v1/genius/lyrics` 
 
-### Example Request:
-`GET /musixmatch/lyrics-search?title={song_title}&artist={artist_name}`
 
-### Example Response:
+---
 
-```
-{
-"artist_name": "Rihanna",
-"track_name": "Diamonds",
-"track_id": 84458341,
-"search_engine": "Musixmatch",
-"artwork_url": "https://s.mxmcdn.net/images-storage/albums2/1/0/4/7/5/4/40457401_350_350.jpg",
-"lyrics": "Shine bright like a diamond ..."
-}
-```
+## Status Codes
 
-## Endpoint:
-`/genius/lyrics`
+| Code | Description            |
+|------|------------------------|
+| 200  | OK                     |
+| 400  | Bad Request            |
+| 401  | Unauthorized           |
+| 404  | Not Found              |
+| 500  | Internal Server Error  |
 
-### Method:
-`GET`
+---
 
-### Parameters:
-`title` (string): The search query (song title).
+## Supported Sources
 
-`api_key` (string): Genius API Key.
+- **Musixmatch**: Best for Spotify / Apple Music tracks
+- **YouTube Music**: For video-based lyrics
 
-### Example Request:
-`GET /genius/lyrics?title={song_title}&api_key={genius_key}`
+---
 
-### Example Response:
+## Public API Demo
 
-```
-{
-"artist_name": "Ariana Grande",
-"track_name": "yes, and?",
-"search_engine": "Genius",
-"artwork_url": "https://images.genius.com/c96f76385524a89fea9f1fa731113c6a.300x300x1.png",
-"lyrics": "[Verse 1], In case you haven't noticed ..."
-}
-```
+https://lyrics.lewdhutao.my.eu.org
 
-## Endpoint:
-`/youtube/lyrics`
+---
 
-### Method:
-`GET`
+## Deploy to Vercel
 
-### Parameters:
-`title` (string): The search query (song title).
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/lewdhutao/lyrics-api)
 
-### Example Request:
-`GET /youtube/lyrics?title={song_title}`
+---
 
-### Example Response:
-
-```
-{
-"artist_name": "Rick Astley",
-"track_name": "Never Gonna Give You Up",
-"search_engine": "YouTube",
-"artwork_url": "https://lh3.googleusercontent.com/eC9DfRcYSk4FE-fvDCJSu_4xsKdVMKxwmFTYFZwP8OqB7R4TKxAjKoR-Kp1lXeRi2WddPFYulSte4eW-=w120-h120-l90-rj",
-"lyrics": "Never gonna give you up, Never gonna let you down ..."
-}
-```
-
-# Error Codes
-`200`: Success
-
-`400`: Bad Request
-
-`401`: Unauthorized
-
-`404`: Not Found
-
-`500`: Internal Server Error
-
-### Deploy to Vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FLewdHuTao%2Fllyrics-api)
-
-### Public API
-
-Visit `https://lyrics.lewdhutao.my.eu.org/` to access the public API. Some search engine like Genius might not work as the API is host in Vercel and it seems like Vercel IP is now blocked from accessing Genius API.
+## License
+ISC © 2025

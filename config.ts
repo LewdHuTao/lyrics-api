@@ -5,4 +5,6 @@
 
 export default {
     development: false,
+    apiUrlV1: "https://lyrics-api-v1.lewdhutao.my.eu.org",
+    apiUrlV2: "https://lyrics-api-v2.lewdhutao.my.eu.org",
 }

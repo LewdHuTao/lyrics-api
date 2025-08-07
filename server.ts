@@ -2,9 +2,15 @@ import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import useragent from 'useragent';
 
-import musixmatch from './search_engine/musixmatch/router';
-import genius from './search_engine/genius/router';
-import youtube from './search_engine/youtube/router';
+// v1 API
+import musixmatchV1 from './platform/musixmatch/v1/router';
+import geniusV1 from './platform/genius/v1/router';
+import youtubeV1 from './platform/youtube/v1/router';
+
+// v2 API
+import musixmatchV2 from './platform/musixmatch/v2/router';
+import youtubeV2 from './platform/youtube/v2/router';
+
 import log from "./utils/logger";
 
 const app = express();
@@ -22,9 +28,11 @@ function logDetails(req: Request, res: Response, next: NextFunction) {
 }
 
 app.use(logDetails);
-app.use(musixmatch);
-app.use(genius);
-app.use(youtube);
+app.use(musixmatchV1);
+app.use(geniusV1);
+app.use(youtubeV1);
+app.use(musixmatchV2);
+app.use(youtubeV2);
 
 app.get('/', async (req, res) => {
   res.sendFile(path.join(__dirname, 'documentation', 'index.html'));

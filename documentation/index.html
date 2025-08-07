@@ -1,247 +1,238 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lyrics API</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        background-color: #121212;
-        color: #ffffff;
-      }
 
-      .light-theme {
-        background-color: #ffffff;
-        color: #000000;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lyrics API</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css"
+    rel="stylesheet" />
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+    }
 
-      .light-theme .navbar {
-        background-color: #f8f9fa;
-      }
+    .light-theme {
+      background-color: #ffffff;
+      color: #000000;
+    }
 
-      .dark-theme .navbar {
-        background-color: #343a40;
-      }
+    .light-theme .navbar {
+      background-color: #f8f9fa;
+    }
 
-      .light-theme pre {
-        background-color: #dddee0;
-        color: #000000;
-      }
+    .dark-theme .navbar {
+      background-color: #343a40;
+    }
 
-      .dark-theme pre {
-        background-color: #333;
-        color: #ffffff;
-      }
+    .light-theme pre {
+      background-color: #dddee0;
+      color: #000000;
+    }
 
-      .footer {
-        background-color: #343a40;
-        padding: 20px;
-        width: 100%;
-        text-align: center;
-        font-size: large;
-        color: white;
-      }
-    </style>
-  </head>
+    .dark-theme pre {
+      background-color: #333;
+      color: #ffffff;
+    }
 
-  <body class="dark-theme">
-    <nav class="navbar navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Lyrics API</a>
-      <div class="ml-auto d-flex">
-        <button class="btn btn-outline-light mr-2" id="themeToggleBtn" onclick="toggleTheme()">
-          <i class="bi bi-moon"></i>
-        </button>
-        <a class="btn btn-outline-light" href="https://github.com/lewdhutao/llyrics-api" target="_blank">
-          <i class="bi bi-github"></i>
-        </a>
-      </div>
-    </nav>
+    .footer {
+      background-color: #343a40;
+      padding: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: large;
+      color: white;
+    }
+  </style>
+</head>
 
-    <div class="container mt-5">
-      <section class="mt-5" id="introduction">
-        <h2>Introduction</h2>
-        <p>
-          The Lyrics API allows you to fetch song lyrics easily from multiple sources, including Musixmatch, Genius, and
-          YouTube Music. You can use it to integrate lyrics into your applications.
-        </p>
-      </section>
-
-      <section class="mt-5" id="get_started">
-        <h2>Getting Started</h2>
-        <p>
-          Welcome to the Lyrics API! Our service offers a comprehensive collection of song lyrics from various sources.
-          Whether you're building a music app, website, or just curious about song lyrics, our API has you covered.
-        </p>
-        <p>
-          The best part? Our Lyrics API is completely free to use! No API key is required for most endpoints. However,
-          for certain advanced features, such as accessing lyrics from Genius, you'll need to sign up for a Genius API
-          key from Genius Website.
-        </p>
-        <p>
-          Getting started with our API now and explore our documentation to discover the available endpoints and start
-          integrating lyrics into your projects today.
-        </p>
-      </section>
-
-      <section class="mt-5" id="source">
-        <h2>Supported Sources</h2>
-        <p>The API can fetch lyrics from these sources:</p>
-        <ul>
-          <li><strong>Musixmatch</strong>: Best for lyrics from Spotify, Deezer, and Apple Music.</li>
-          <li><strong>Genius</strong>: Good for lyrics and annotations from various music sources.</li>
-          <li><strong>YouTube Music</strong>: Great for lyrics from YouTube videos.</li>
-        </ul>
-      </section>
-
-      <h2>Endpoints:</h2>
-
-      <section class="my-4 mx-4" id="musixmatch_endpoint">
-        <h3>1. Musixmatch</h3>
-        <h4 class="mt-4">Search Lyrics</h4>
-        <p>Endpoint: <code>/musixmatch/lyrics</code></p>
-        <p>Method: <code>GET</code></p>
-        <p>Parameters:</p>
-        <ul>
-          <li><code>title</code> (string): The search query (song title).</li>
-        </ul>
-        <p>Example Request:</p>
-        <pre
-          class="px-2 py-1 rounded apiUrlPlaceholder"
-        ><code><span class="text-info">GET</span> <span class="apiUrl"></span>/musixmatch/lyrics?title={song_title}</code></pre>
-        <p>Example Response:</p>
-        <pre class="px-2 py-2 rounded"><code>{
-    "artist_name": "The Weeknd",
-    "track_name": "After Hours",
-    "track_id": 194169155,
-    "search_engine": "Musixmatch",
-    "artwork_url": "https://s.mxmcdn.net/images-storage/albums2/7/2/8/7/3/3/48337827_350_350.jpg",
-    "lyrics": "Thought I almost died in my dream again (baby, almost died) ..."
-}</code></pre>
-
-        <h4 class="mt-5">For More Accurate Lyrics Results</h4>
-        <p>Endpoint: <code>/musixmatch/lyrics-search</code></p>
-        <p>Method: <code>GET</code></p>
-        <p>Parameters:</p>
-        <ul>
-          <li><code>title</code> (string): The search query (song title).</li>
-          <li><code>artist</code> (string): The artist's name for the song.</li>
-        </ul>
-
-        <p>Example Request:</p>
-        <pre
-          class="px-2 py-1 rounded apiUrlPlaceholder"
-        ><code><span class="text-info">GET</span> <span class="apiUrl"></span>/musixmatch/lyrics-search?title={song_title}&artist={artist_name}</code></pre>
-        <p>Example Response:</p>
-        <pre class="px-2 py-2 rounded"><code>{
-    "artist_name": "Rihanna",
-    "track_name": "Diamonds",
-    "track_id": 84458341,
-    "search_engine": "Musixmatch",
-    "artwork_url": "https://s.mxmcdn.net/images-storage/albums2/1/0/4/7/5/4/40457401_350_350.jpg",
-    "lyrics": "Shine bright like a diamond ..."
-}</code></pre>
-      </section>
-
-      <section class="my-5 mx-4" id="genius_endpoint">
-        <h3>2. Genius</h3>
-        <h4 class="mt-4">Search Lyrics</h4>
-        <p>Endpoint: <code>/genius/lyrics</code></p>
-        <p>Method: <code>GET</code></p>
-        <p>Parameters:</p>
-        <ul>
-          <li><code>title</code> (string): The search query (song title).</li>
-          <li><code>api_key</code> (string): Genius API Key.</li>
-        </ul>
-        <p>Example Request:</p>
-        <pre
-          class="px-2 py-1 rounded apiUrlPlaceholder"
-        ><code><span class="text-info">GET</span> <span class="apiUrl"></span>/genius/lyrics?title={song_title}&api_key={genius_key}</code></pre>
-        <p>Example Response:</p>
-        <pre class="px-2 py-2 rounded"><code>{
-    "artist_name": "Ariana Grande",
-    "track_name": "​yes, and?",
-    "search_engine": "Genius",
-    "artwork_url": "https://images.genius.com/c96f76385524a89fea9f1fa731113c6a.300x300x1.png",
-    "lyrics": "[Verse 1], In case you haven't noticed ..."
-}</code></pre>
-      </section>
-
-      <section class="my-5 mx-4" id="youtube_endpoint">
-        <h3>3. YouTube Music</h3>
-        <h4 class="mt-4">Search Lyrics</h4>
-        <p>Endpoint: <code>/youtube/lyrics</code></p>
-        <p>Method: <code>GET</code></p>
-        <p>Parameters:</p>
-        <ul>
-          <li><code>title</code> (string): The search query (song title).</li>
-        </ul>
-        <p>Example Request:</p>
-        <pre
-          class="px-2 py-1 rounded apiUrlPlaceholder"
-        ><code><span class="text-info">GET</span> <span class="apiUrl"></span>/youtube/lyrics?title={song_title}</code></pre>
-        <p>Example Response:</p>
-        <pre class="px-2 py-2 rounded"><code>{
-    "artist_name": "Rick Astley",
-    "track_name": "Never Gonna Give You Up",
-    "search_engine": "YouTube",
-    "artwork_url": "https://lh3.googleusercontent.com/eC9DfRcYSk4FE-fvDCJSu_4xsKdVMKxwmFTYFZwP8OqB7R4TKxAjKoR-Kp1lXeRi2WddPFYulSte4eW-=w120-h120-l90-rj",
-    "lyrics": "Never gonna give you up, Never gonna let you down ..."
-}</code></pre>
-      </section>
-
-      <section class="my-5" id="response_code">
-        <h2>Response Codes</h2>
-        <ul>
-          <li><code>200</code>: Success</li>
-          <li><code>400</code>: Bad Request</li>
-          <li><code>401</code>: Unauthorized</li>
-          <li><code>404</code>: Not Found</li>
-          <li><code>500</code>: Internal Server Error</li>
-        </ul>
-      </section>
+<body class="dark-theme">
+  <nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Lyrics API</a>
+    <div class="ml-auto d-flex">
+      <button class="btn btn-outline-light mr-2" id="themeToggleBtn" onclick="toggleTheme()">
+        <i class="bi bi-moon"></i>
+      </button>
+      <a class="btn btn-outline-light" href="https://github.com/lewdhutao/llyrics-api" target="_blank">
+        <i class="bi bi-github"></i>
+      </a>
     </div>
+  </nav>
 
-    <footer>
-      <div class="footer">
-        <p>&copy; 2024 All rights reserved.</p>
+  <div class="container mt-5">
+    <section class="mt-5" id="warning-message">
+      <div style="background-color: rgba(255, 0, 0, 0.3); padding: 10px; border-radius: 5px;">
+        ⚠️ The <strong>v1 API endpoint</strong> is now <strong>deprecated</strong> and no longer actively maintained.
+        While it may still function, it will not receive any further updates, bug fixes, or support. For the best
+        performance, latest features, and improved stability, please migrate to the latest <strong>v2
+          endpoints</strong>.
       </div>
-    </footer>
+    </section>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-      function setDomain() {
-        const domain = window.location.origin;
-        const apiUrlElements = document.querySelectorAll('.apiUrl');
-        apiUrlElements.forEach((element) => {
-          element.textContent = domain;
-        });
+    <section class="mt-5" id="introduction">
+      <h2>Introduction</h2>
+      <p>
+        The Lyrics API allows you to fetch song lyrics easily from multiple sources, including Musixmatch, Genius, and
+        YouTube Music. You can use it to integrate lyrics into your applications.
+      </p>
+    </section>
+
+    <section class="mt-5" id="get_started">
+      <h2>Getting Started</h2>
+      <p>
+        Welcome to the Lyrics API! Our service offers a comprehensive collection of song lyrics from various sources.
+        Whether you're building a music app, website, or just curious about song lyrics, our API has you covered.
+      </p>
+      <p>
+        The best part? Our Lyrics API is completely free to use! No API key is required for most endpoints. However,
+        for certain advanced features, such as accessing lyrics from Genius, you'll need to sign up for a Genius API
+        key from Genius Website.
+      </p>
+      <p>
+        Getting started with our API now and explore our documentation to discover the available endpoints and start
+        integrating lyrics into your projects today.
+      </p>
+    </section>
+
+    <section class="mt-5" id="migrating">
+      <div>
+        <h2>Migrating from V1 to V2</h2>
+
+        <div class="mt-4" style="
+        background-color: rgba(255, 0, 0, 0.1);
+        border-left: 4px solid rgba(255, 0, 0, 0.3);
+        padding: 16px;
+        margin-bottom: 24px;
+        font-size: 15px;
+        border-radius: 4px;
+      ">
+          The V2 API has been released with major improvements over V1. It offers better performance, more consistent
+          results, and supports both title-only and title+artist queries for higher accuracy.<br /><br />
+          Due to ongoing restrictions from Genius blocking access from popular cloud providers such as Oracle and
+          Google, the Genius platform has been removed from V2 entirely. While Genius may still work under V1, it is no
+          longer officially supported and may stop working at any time.
+        </div>
+
+        <h3 class="mt-4">Endpoints:</h3>
+
+        <h4 class="mx-4 mt-4">1. Musixmatch</h4>
+        <div class="mx-4">
+          <p class="mt-4" style="font-size: medium; font-weight: normal;">V1 Request:</p>
+          <pre class="px-2 py-1 rounded apiUrlPlaceholder"
+            style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v1/musixmatch/lyrics?title={song_title}</code></pre>
+
+          <pre class="px-2 py-1 rounded apiUrlPlaceholder"
+            style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v1/musixmatch/lyrics?title={song_title}&artist={artist_name}</code></pre>
+
+          <p class="mt-4" style="font-size: medium; font-weight: normal;">V2 Request:</p>
+
+          <pre class="px-2 py-1 rounded apiUrlPlaceholder"
+            style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v2/musixmatch/lyrics?title={song_title}</code></pre>
+
+          <pre class="px-2 py-1 rounded apiUrlPlaceholder"
+            style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v2/musixmatch/lyrics?title={song_title}&artist={artist_name}</code></pre>
+        </div>
+
+        <h4 class="mx-4 mt-4">2. YouTube</h4>
+        <div class="mx-4">
+          <p class="mt-4" style="font-size: medium; font-weight: normal;">V1 Request:</p>
+          <pre class="px-2 py-1 rounded apiUrlPlaceholder"
+            style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v1/youtube/lyrics?title={song_title}</code></pre>
+
+          <p class="mt-4" style="font-size: medium; font-weight: normal;">V2 Request:</p>
+          <p style="font-size: medium; font-weight: normal;">
+            The V2 endpoint supports fetching lyrics by <strong>title only</strong>, or by <strong>title and
+              artist</strong> for more accurate results.
+          </p>
+
+          <p class="mt-2" style="font-size: medium; font-weight: normal;">Example without artist:</p>
+          <pre class="px-2 py-1 rounded apiUrlPlaceholder"
+            style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v2/youtube/lyrics?title={song_title}</code></pre>
+
+          <p class="mt-2" style="font-size: medium; font-weight: normal;">Example with artist:</p>
+          <pre class="px-2 py-1 rounded apiUrlPlaceholder"
+            style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v2/youtube/lyrics?title={song_title}&artist={artist_name}</code></pre>
+        </div>
+
+        <h3 class="mt-5">Example Response:</h3>
+        <pre class="mt-4 px-2 py-2 rounded">
+<code>{
+  "data": {
+    "artistName": "sombr",
+    "trackName": "back to friends",
+    "trackId": "dbEY-JVHJWg",
+    "searchEngine": "YouTube",
+    "artworkUrl": "https://lh3.googleusercontent.com/PbekZdhqqr2gY7U_15sNIAv0lnoxHkoTxj5wRV32G3_81Qqnk7pD2RzZNe-D_MLKZkhHkxh1C7wzYRr8=w120-h120-l90-rj",
+    "lyrics": "Touch my body tender\n'Cause the feeling makes me weak\nKicking off the covers\n..."
+  },
+  "metadata": {
+    "apiVersion": "2.0"
+  }
+}</code>
+</pre>
+      </div>
+    </section>
+
+    <section class="mt-5" id="source">
+      <h2>Supported Sources</h2>
+      <p>The API can fetch lyrics from these sources:</p>
+      <ul>
+        <li><strong>Musixmatch</strong>: Best for lyrics from Spotify, Deezer, and Apple Music.</li>
+        <li><strong>YouTube Music</strong>: Great for lyrics from YouTube videos.</li>
+      </ul>
+    </section>
+
+    <section class="my-5" id="response_code">
+      <h2>Response Codes</h2>
+      <ul>
+        <li><code>200</code>: Success</li>
+        <li><code>400</code>: Bad Request</li>
+        <li><code>401</code>: Unauthorized</li>
+        <li><code>404</code>: Not Found</li>
+        <li><code>500</code>: Internal Server Error</li>
+      </ul>
+    </section>
+  </div>
+
+  <footer>
+    <div class="footer">
+      <p>&copy; 2025 All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    function setDomain() {
+      const domain = window.location.origin;
+      const apiUrlElements = document.querySelectorAll('.apiUrl');
+      apiUrlElements.forEach((element) => {
+        element.textContent = domain;
+      });
+    }
+
+    setDomain();
+  </script>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('light-theme');
+      document.body.classList.toggle('dark-theme');
+      const btnIcon = document.querySelector('#themeToggleBtn i');
+      if (document.body.classList.contains('light-theme')) {
+        btnIcon.classList.remove('bi-moon');
+        btnIcon.classList.add('bi-sun');
+      } else {
+        btnIcon.classList.remove('bi-sun');
+        btnIcon.classList.add('bi-moon');
       }
+    }
 
-      setDomain();
-    </script>
+    document.querySelector('#themeToggleBtn i').classList.add('bi-moon');
+  </script>
+</body>
 
-    <script>
-      function toggleTheme() {
-        document.body.classList.toggle('light-theme');
-        document.body.classList.toggle('dark-theme');
-        const btnIcon = document.querySelector('#themeToggleBtn i');
-        if (document.body.classList.contains('light-theme')) {
-          btnIcon.classList.remove('bi-moon');
-          btnIcon.classList.add('bi-sun');
-        } else {
-          btnIcon.classList.remove('bi-sun');
-          btnIcon.classList.add('bi-moon');
-        }
-      }
-
-      document.querySelector('#themeToggleBtn i').classList.add('bi-moon');
-    </script>
-  </body>
 </html>

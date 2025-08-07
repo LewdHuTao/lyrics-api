@@ -1,18 +1,12 @@
 import express, { Response, Request, Router } from 'express';
-import path from 'path';
-import Youtube from './Youtube';
-import log from '../../utils/logger';
+import log from '../../../utils/logger';
+import config from '../../../config';
 
-const youtube = new Youtube();
 const router: Router = express.Router();
 
 router.use(express.json());
 
-router.get('/youtube', (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-router.get('/youtube/lyrics', async (req: Request, res: Response) => {
+router.get('/v1/youtube/lyrics', async (req: Request, res: Response) => {
   const title = req.query.title as string | undefined;
 
   if (!title) {
@@ -23,8 +17,11 @@ router.get('/youtube/lyrics', async (req: Request, res: Response) => {
   }
 
   try {
-    const tracks = await youtube.getLyrics(title);
-    res.send(tracks);
+    const api = `${config.apiUrlV1}/api/v1/youtube?title=${encodeURIComponent(title)}`;
+    const response = await fetch(api);
+    const data = await response.json();
+    
+    res.send(data);
   } catch (error) {
     log.error(`Error: ${error as string}`);
     res.status(500).send({
