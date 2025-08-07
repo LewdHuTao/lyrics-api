@@ -158,8 +158,10 @@ class Musixmatch {
       const artist_name = trackInfo.artist_name;
       const artwork_url = trackInfo.album_coverart_350x350 || null;
       const search_engine = 'Musixmatch';
+      const message = "The v1 API endpoint is deprecated and no longer maintained. While it may still work, it will not receive updates, bug fixes, or support. Please migrate to the latest v2 endpoints for improved stability, performance, and new features.";
 
       return {
+        message,
         artist_name,
         track_name,
         track_id,

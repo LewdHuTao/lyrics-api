@@ -36,8 +36,9 @@ class Youtube {
       const video_id = data.videoId;
       const lyrics_array = (await ytm.getLyrics(video_id)) as string[];
       const lyrics = lyrics_array.join('\n');
+      const message = "The v1 API endpoint is deprecated and no longer maintained. While it may still work, it will not receive updates, bug fixes, or support. Please migrate to the latest v2 endpoints for improved stability, performance, and new features.";
 
-      return { artist_name, track_name, search_engine, artwork_url, lyrics };
+      return { message, artist_name, track_name, search_engine, artwork_url, lyrics };
     } catch (error) {
       log.error(`Error: ${error as string}`);
       return {

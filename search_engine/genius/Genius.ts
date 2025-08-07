@@ -68,7 +68,9 @@ class Genius {
         throw new Error('Lyrics could not be extracted.');
       }
 
-      return { artist_name, track_name, search_engine, artwork_url, lyrics: lyrics.trim() };
+      const message = "The v1 API endpoint is deprecated and no longer maintained. While it may still work, it will not receive updates, bug fixes, or support. Please migrate to the latest v2 endpoints for improved stability, performance, and new features.";
+
+      return { message, artist_name, track_name, search_engine, artwork_url, lyrics: lyrics.trim() };
     } catch (error) {
       log.error(`Error: ${error instanceof Error ? error.message : String(error)}`);
       return { message: 'No lyrics were found.', response: '404 Not Found' };
