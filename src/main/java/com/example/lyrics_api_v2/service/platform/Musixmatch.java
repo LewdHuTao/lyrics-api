@@ -1,6 +1,7 @@
 package com.example.lyrics_api_v2.service.platform;
 
 import com.example.lyrics_api_v2.model.Lyrics;
+import com.example.lyrics_api_v2.model.MusixmatchToken;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -66,6 +67,7 @@ public class Musixmatch implements PlatformClient {
                 cachedToken = matcher.group(1);
                 tokenExpiry = System.currentTimeMillis() + (30 * 60 * 1000); // 30 mins expiry
             } else {
+                new MusixmatchToken("Failed to extract user token from Musixmatch", "500 - Internal Server Error", 500);
                 throw new RuntimeException("Failed to extract user token from Musixmatch.");
             }
         } catch (Exception e) {
@@ -92,7 +94,7 @@ public class Musixmatch implements PlatformClient {
             lyrics = lyrics.replace("\\n", "\n").replaceAll("\\[\\d+:\\d+\\.\\d+\\]", "").trim();
             return lyrics;
         } else {
-            throw new RuntimeException("Lyrics not found for track ID: " + trackId);
+            return null;
         }
     }
 
@@ -116,7 +118,7 @@ public class Musixmatch implements PlatformClient {
 
                 return new Lyrics(artistName, trackName, trackId, "Musixmatch", artworkUrl, lyrics);
             } else {
-                throw new RuntimeException("No track found for title: " + title);
+                return null;
             }
 
         } catch (Exception e) {
@@ -148,7 +150,7 @@ public class Musixmatch implements PlatformClient {
 
                 return new Lyrics(artistName, trackName, trackId, "Musixmatch", artworkUrl, lyrics);
             } else {
-                throw new RuntimeException("No lyrics found for title: " + title + " and artist: " + artist);
+                return null;
             }
 
         } catch (Exception e) {

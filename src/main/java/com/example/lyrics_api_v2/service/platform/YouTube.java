@@ -63,21 +63,24 @@ public class YouTube implements PlatformClient {
 
             if (songVideoIds.isEmpty()) return null;
 
-            for (int i = 0; i < songVideoIds.size(); i++) {
-                String videoId = songVideoIds.get(i);
-                String browseId = getLyricsBrowseId(videoId);
-                if (browseId == null) continue;
-                fetchSongContent(videoId);
+            String videoId = songVideoIds.get(0);
+            String browseId = getLyricsBrowseId(videoId);
 
-                String lyricsContent = fetchLyricsContent(browseId);
-                if (lyricsContent != null && !lyricsContent.isBlank()) {
-                    return new Lyrics(this.artistName, this.trackTitle, videoId, "YouTube", this.artworkUrl, lyricsContent);
-                }
+            if (browseId == null) {
+                return null;
             }
+
+            fetchSongContent(videoId);
+            String lyricsContent = fetchLyricsContent(browseId);
+
+            if (lyricsContent != null && !lyricsContent.isBlank()) {
+                return new Lyrics(this.artistName, this.trackTitle, videoId, "YouTube", this.artworkUrl, lyricsContent);
+            }
+
+            return null;
         } catch (Exception e) {
             throw new RuntimeException("Error fetching YouTube lyrics: " + e.getMessage());
         }
-        return null;
     }
 
     private List<String> searchSongVideoIds(String query) throws IOException {
