@@ -67,7 +67,7 @@ public class YouTube implements PlatformClient {
             String browseId = getLyricsBrowseId(videoId);
 
             if (browseId == null) {
-                throw new RuntimeException("No lyrics found for: " + query);
+                return null;
             }
 
             fetchSongContent(videoId);
@@ -77,7 +77,7 @@ public class YouTube implements PlatformClient {
                 return new Lyrics(this.artistName, this.trackTitle, videoId, "YouTube", this.artworkUrl, lyricsContent);
             }
 
-            throw new RuntimeException("No lyrics found for: " + query);
+            return null;
         } catch (Exception e) {
             throw new RuntimeException("Error fetching YouTube lyrics: " + e.getMessage());
         }

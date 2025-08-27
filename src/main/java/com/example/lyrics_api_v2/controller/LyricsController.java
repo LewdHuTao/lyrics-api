@@ -27,6 +27,8 @@ public class LyricsController {
         Lyrics lyrics = lyricsService.getLyrics(platform, title, artist);
         ApiVersion version = new ApiVersion();
 
+        System.out.println(lyrics);
+
         if (lyrics == null) {
             LyricsNotFound error = new LyricsNotFound();
             return ResponseEntity.status(404).body(new ApiResponse<>(error, version));
