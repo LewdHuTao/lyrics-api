@@ -89,7 +89,10 @@ public class Musixmatch implements PlatformClient {
 
         if (matcher.find()) {
             String lyrics = matcher.group(1);
-            lyrics = lyrics.replace("\\n", "\n").replaceAll("\\[\\d+:\\d+\\.\\d+\\]", "").trim();
+            ObjectMapper mapper = new ObjectMapper();
+            lyrics = mapper.readValue("\"" + lyrics.replace("\"", "\\\"") + "\"", String.class)
+                    .replaceAll("\\[\\d+:\\d+\\.\\d+\\]", "")
+                    .trim();
             return lyrics;
         } else {
             throw new RuntimeException("Lyrics not found for track ID: " + trackId);
