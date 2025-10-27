@@ -22,9 +22,10 @@ public class LyricsController {
     public ResponseEntity<?> getLyrics(
             @RequestParam String platform,
             @RequestParam String title,
-            @RequestParam(required = false) String artist
+            @RequestParam(required = false) String artist,
+            @RequestParam(required = false) String translate
     ) {
-        Lyrics lyrics = lyricsService.getLyrics(platform, title, artist);
+        Lyrics lyrics = lyricsService.getLyrics(platform, title, artist, translate);
         ApiVersion version = new ApiVersion();
 
         if (lyrics == null) {

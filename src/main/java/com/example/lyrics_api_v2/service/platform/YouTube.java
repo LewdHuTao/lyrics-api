@@ -56,7 +56,7 @@ public class YouTube implements PlatformClient {
     }
 
     @Override
-    public Lyrics fetchLyrics(String title, String artist) {
+    public Lyrics fetchLyrics(String title, String artist, String langCode) {
         try {
             String query = (artist != null && !artist.isBlank()) ? title + " " + artist : title;
             List<String> songVideoIds = searchSongVideoIds(query);

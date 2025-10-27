@@ -1,6 +1,8 @@
 package com.example.lyrics_api_v2.service.platform;
 
 import com.example.lyrics_api_v2.model.Lyrics;
+import com.example.lyrics_api_v2.model.LyricsNotFound;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -22,6 +24,7 @@ public class Musixmatch implements PlatformClient {
     private final String searchTermUrl = "https://apic-desktop.musixmatch.com/ws/1.1/track.search?app_id=web-desktop-app-v1.0&page_size=5&page=1&s_track_rating=desc&quorum_factor=1.0";
     private final String lyricsUrl = "https://apic-desktop.musixmatch.com/ws/1.1/track.subtitle.get?app_id=web-desktop-app-v1.0&subtitle_format=lrc";
     private final String lyricsAlternative = "https://apic-desktop.musixmatch.com/ws/1.1/macro.subtitles.get?format=json&namespace=lyrics_richsynched&subtitle_format=mxm&app_id=web-desktop-app-v1.0";
+    private final String translatedLyricsUrl = "https://apic-desktop.musixmatch.com/ws/1.1/crowd.track.translations.get?app_id=web-desktop-app-v1.0";
 
     private String get(String urlStr) throws Exception {
         URL url = new URL(urlStr);
@@ -58,13 +61,11 @@ public class Musixmatch implements PlatformClient {
     private synchronized void refreshToken() {
         try {
             String result = get(tokenUrl);
-
             Pattern pattern = Pattern.compile("\"user_token\":\"(.*?)\"");
             Matcher matcher = pattern.matcher(result);
-
             if (matcher.find()) {
                 cachedToken = matcher.group(1);
-                tokenExpiry = System.currentTimeMillis() + (30 * 60 * 1000); // 30 mins expiry
+                tokenExpiry = System.currentTimeMillis() + (30 * 60 * 1000);
             } else {
                 throw new RuntimeException("Failed to extract user token from Musixmatch.");
             }
@@ -96,6 +97,75 @@ public class Musixmatch implements PlatformClient {
             return lyrics;
         } else {
             throw new RuntimeException("Lyrics not found for track ID: " + trackId);
+        }
+    }
+
+    private Lyrics getTranslatedLyrics(String title, String artist, String langCode) {
+        String userToken = getToken();
+        String trackId = null, lyrics = null, trackName = null, artistName = null, artworkUrl = null, formattedUrl = null;
+        System.out.println("1");
+        try {
+            if (artist != null) {
+                formattedUrl = lyricsAlternative + "&usertoken=" + userToken
+                        + "&q_album=&q_artist=" + URLEncoder.encode(artist, StandardCharsets.UTF_8)
+                        + "&q_artists=&track_spotify_id=&q_track=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
+
+                String result = get(formattedUrl);
+                Pattern lyricsPattern = Pattern.compile("\"lyrics_body\":\"(.*?)\"");
+                Matcher matcher = lyricsPattern.matcher(result);
+                Pattern pattern = Pattern.compile("\"track_id\":(\\d+).*?\"track_name\":\"(.*?)\".*?\"artist_name\":\"(.*?)\".*?\"album_coverart_350x350\":\"(.*?)\"", Pattern.DOTALL);
+                Matcher trackMatcher = pattern.matcher(result);
+
+                if (matcher.find() && trackMatcher.find()) {
+                    trackId = trackMatcher.group(1);
+                    trackName = trackMatcher.group(2);
+                    artistName = trackMatcher.group(3);
+                    artworkUrl = trackMatcher.group(4);
+                } else {
+                    throw new RuntimeException("No track found for title: " + title);
+                }
+            } else {
+                formattedUrl = searchTermUrl + "&q_track=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&usertoken=" + userToken;
+
+                String result = get(formattedUrl);
+                Pattern pattern = Pattern.compile("\"track_id\":(\\d+).*?\"track_name\":\"(.*?)\".*?\"artist_name\":\"(.*?)\".*?\"album_coverart_350x350\":\"(.*?)\"", Pattern.DOTALL);
+                Matcher matcher = pattern.matcher(result);
+
+                if (matcher.find()) {
+                    trackId = matcher.group(1);
+                    trackName = matcher.group(2);
+                    artistName = matcher.group(3);
+                    artworkUrl = matcher.group(4);
+                } else {
+                    throw new RuntimeException("No track found for title: " + title);
+                }
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            String url = translatedLyricsUrl +
+                    "&track_id=" + trackId +
+                    "&usertoken=" + userToken +
+                    "&selected_language=" + langCode;
+
+            String translatedResult = get(url);
+            Pattern translatedPattern = Pattern.compile("\"description\":\"(.*?)\".*?\"selected_language\":\"" + Pattern.quote(langCode) + "\"", Pattern.DOTALL);
+            Matcher translatedMatcher = translatedPattern.matcher(translatedResult);
+            System.out.println(translatedMatcher.find());
+
+            StringBuilder translatedLyrics = new StringBuilder();
+            while (translatedMatcher.find()) {
+                String line = translatedMatcher.group(1);
+                line = mapper.readValue("\"" + line.replace("\"", "\\\"") + "\"", String.class)
+                        .replaceAll("\\[\\d+:\\d+\\.\\d+\\]", "")
+                        .trim();
+                if (!line.isEmpty()) {
+                    translatedLyrics.append(line).append("\n");
+                }
+            }
+
+            return new Lyrics(artistName, trackName, trackId, "Musixmatch", artworkUrl, translatedLyrics.toString());
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching Musixmatch lyrics: " + e.getMessage());
         }
     }
 
@@ -160,11 +230,15 @@ public class Musixmatch implements PlatformClient {
     }
 
     @Override
-    public Lyrics fetchLyrics(String title, String artist) {
-        if (artist != null && !artist.isEmpty()) {
+    public Lyrics fetchLyrics(String title, String artist, String translate) {
+        if (artist != null && !artist.isEmpty() && translate == null) {
             return searchTrackByTitleAndArtist(title, artist);
-        } else {
+        } else if (artist == null && translate == null) {
             return searchTrackByTitle(title);
+        } else if (translate != null && !translate.isEmpty()) {
+            return getTranslatedLyrics(title, artist, translate);
+        } else {
+            return null;
         }
     }
 }

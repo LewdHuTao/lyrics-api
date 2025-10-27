@@ -16,12 +16,12 @@ public class LyricsService {
         this.youtube = youtube;
     }
 
-    public Lyrics getLyrics(String platform, String title, String artist) {
+    public Lyrics getLyrics(String platform, String title, String artist, String translate) {
         switch (platform.toLowerCase()) {
             case "musixmatch":
-                return musixmatch.fetchLyrics(title, artist);
+                return musixmatch.fetchLyrics(title, artist, translate);
             case "youtube":
-                return youtube.fetchLyrics(title, artist);
+                return youtube.fetchLyrics(title, artist, translate);
             default:
                 throw new IllegalArgumentException("Unsupported platform: " + platform);
         }
