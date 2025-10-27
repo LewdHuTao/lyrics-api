@@ -103,7 +103,7 @@ public class Musixmatch implements PlatformClient {
     private Lyrics getTranslatedLyrics(String title, String artist, String langCode) {
         String userToken = getToken();
         String trackId = null, lyrics = null, trackName = null, artistName = null, artworkUrl = null, formattedUrl = null;
-        System.out.println("1");
+
         try {
             if (artist != null) {
                 formattedUrl = lyricsAlternative + "&usertoken=" + userToken
@@ -150,7 +150,6 @@ public class Musixmatch implements PlatformClient {
             String translatedResult = get(url);
             Pattern translatedPattern = Pattern.compile("\"description\":\"(.*?)\".*?\"selected_language\":\"" + Pattern.quote(langCode) + "\"", Pattern.DOTALL);
             Matcher translatedMatcher = translatedPattern.matcher(translatedResult);
-            System.out.println(translatedMatcher.find());
 
             StringBuilder translatedLyrics = new StringBuilder();
             while (translatedMatcher.find()) {
