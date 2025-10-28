@@ -15,8 +15,6 @@ interface ApiVersionConfig {
     buildUrl: UrlBuilder;
 }
 
-// TODO: add lyrics translation
-
 const API_CONFIG: Record<string, ApiVersionConfig> = {
     v1: {
         requiredParams: (platform) => {
@@ -45,6 +43,13 @@ router.get('/:apiVersion/:platform/lyrics', async (req: Request, res: Response) 
     const title = req.query.title as string | undefined;
     const artist = req.query.artist as string | undefined;
     const api_key = req.query.api_key as string | undefined;
+
+    if (apiVersion == "v1" || apiVersion == "V1") {
+        res.send({
+            message: "API v1 is deprecated and no longer supported. Please use API v2.",
+            code: 410,
+        })
+    }
 
     const configEntry = API_CONFIG[apiVersion];
     if (!configEntry) {
