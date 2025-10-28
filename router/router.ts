@@ -15,6 +15,8 @@ interface ApiVersionConfig {
     buildUrl: UrlBuilder;
 }
 
+// TODO: add lyrics translation
+
 const API_CONFIG: Record<string, ApiVersionConfig> = {
     v1: {
         requiredParams: (platform) => {
