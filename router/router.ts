@@ -34,7 +34,7 @@ router.get('/:apiVersion/:platform/lyrics', async (req: Request, res: Response) 
     if (apiVersion.toLowerCase() === 'v1') {
         return res.status(410).json({
             message: 'API v1 is deprecated and no longer supported. Please use API v2.',
-            code: 410
+            response: '410 Gone'
         });
     }
 
