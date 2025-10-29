@@ -1,10 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import useragent from 'useragent';
-
 import router from './router/router';
-
 import log from "./utils/logger";
+import ratelimit from "./utils/ratelimit";
+import config from "./config";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,6 +18,10 @@ function logDetails(req: Request, res: Response, next: NextFunction) {
   log.success(`[${currentTime}] Request: ${req.method} ${req.originalUrl}`);
   log.warn(`[${currentTime}] User-Agent: ${browserDetails} | IP: ${ipAddress}`);
   next();
+}
+
+if (config.ratelimit) {
+  app.use(ratelimit);
 }
 
 app.use(logDetails);
