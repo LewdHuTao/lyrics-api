@@ -9,5 +9,4 @@ const ratelimit = rateLimit({
     },
 });
 
-
 export default ratelimit;

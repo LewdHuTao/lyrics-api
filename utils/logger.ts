@@ -1,5 +1,4 @@
 import colors from 'colors';
-import config from '../config';
 
 const getTimestamp = (): string => {
   const now = new Date();
