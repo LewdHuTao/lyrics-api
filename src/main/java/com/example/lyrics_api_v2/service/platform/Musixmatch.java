@@ -69,6 +69,7 @@ public class Musixmatch implements PlatformClient {
                 cachedToken = matcher.group(1);
                 tokenExpiry = System.currentTimeMillis() + (30 * 60 * 1000);
             } else {
+                new MusixmatchToken("Failed to extract user token from Musixmatch", "500 - Internal Server Error", 500);
                 throw new RuntimeException("Failed to extract user token from Musixmatch.");
             }
         } catch (Exception e) {
@@ -98,7 +99,7 @@ public class Musixmatch implements PlatformClient {
                     .trim();
             return lyrics;
         } else {
-            throw new RuntimeException("Lyrics not found for track ID: " + trackId);
+            return null;
         }
     }
 
