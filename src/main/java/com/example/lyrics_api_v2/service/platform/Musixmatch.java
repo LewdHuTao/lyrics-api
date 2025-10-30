@@ -3,6 +3,8 @@ package com.example.lyrics_api_v2.service.platform;
 import com.example.lyrics_api_v2.model.Lyrics;
 import com.example.lyrics_api_v2.model.LyricsNotFound;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -100,7 +102,7 @@ public class Musixmatch implements PlatformClient {
         }
     }
 
-    private Lyrics getTranslatedLyrics(String title, String artist, String langCode) {
+    private ResponseEntity<?> getTranslatedLyrics(String title, String artist, String langCode) {
         String userToken = getToken();
         String trackId = null, lyrics = null, trackName = null, artistName = null, artworkUrl = null, formattedUrl = null;
 
@@ -120,9 +122,10 @@ public class Musixmatch implements PlatformClient {
                     trackId = trackMatcher.group(1);
                     trackName = trackMatcher.group(2);
                     artistName = trackMatcher.group(3);
-                    artworkUrl = trackMatcher.group(4);
+                    artworkUrl = trackMatcher.group(4).replace("\\/", "/");
                 } else {
-                    throw new RuntimeException("No track found for title: " + title);
+                    LyricsNotFound noLyrics = new LyricsNotFound("No lyrics found for title " + "'" + title + "'" + " and artist " + "'" + artist + "'.");
+                    return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
                 }
             } else {
                 formattedUrl = searchTermUrl + "&q_track=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&usertoken=" + userToken;
@@ -135,9 +138,10 @@ public class Musixmatch implements PlatformClient {
                     trackId = matcher.group(1);
                     trackName = matcher.group(2);
                     artistName = matcher.group(3);
-                    artworkUrl = matcher.group(4);
+                    artworkUrl = matcher.group(4).replace("\\/", "/");
                 } else {
-                    throw new RuntimeException("No track found for title: " + title);
+                    LyricsNotFound noLyrics = new LyricsNotFound("No lyrics found for title " + "'" + title + "'.");
+                    return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
                 }
             }
 
@@ -162,13 +166,19 @@ public class Musixmatch implements PlatformClient {
                 }
             }
 
-            return new Lyrics(artistName, trackName, trackId, "Musixmatch", artworkUrl, translatedLyrics.toString());
+            if (translatedLyrics.isEmpty()) {
+                LyricsNotFound noTranslatedLyrics = new LyricsNotFound("No translated lyrics available.");
+                return new ResponseEntity<>(noTranslatedLyrics, HttpStatus.NOT_FOUND);
+            }
+
+            Lyrics newLyrics = new Lyrics(artistName, trackName, trackId, "Musixmatch", artworkUrl, translatedLyrics.toString());
+            return new ResponseEntity<>(newLyrics, HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException("Error fetching Musixmatch lyrics: " + e.getMessage());
         }
     }
 
-    private Lyrics searchTrackByTitle(String title) {
+    private ResponseEntity<?> searchTrackByTitle(String title) {
         String userToken = getToken();
         try {
             String query = URLEncoder.encode(title, StandardCharsets.UTF_8);
@@ -182,13 +192,14 @@ public class Musixmatch implements PlatformClient {
                 String trackId = matcher.group(1);
                 String trackName = matcher.group(2);
                 String artistName = matcher.group(3);
-                String artworkUrl = matcher.group(4);
-
+                String artworkUrl = matcher.group(4).replace("\\/", "/");
                 String lyrics = fetchLyricsByTrackId(trackId, userToken);
 
-                return new Lyrics(artistName, trackName, trackId, "Musixmatch", artworkUrl, lyrics);
+                Lyrics newLyrics = new Lyrics(artistName, trackName, trackId, "Musixmatch", artworkUrl, lyrics);
+                return new ResponseEntity<>(newLyrics, HttpStatus.OK);
             } else {
-                throw new RuntimeException("No track found for title: " + title);
+                LyricsNotFound noLyrics = new LyricsNotFound("No lyrics found for title " + "'" + title + "'.");
+                return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
             }
 
         } catch (Exception e) {
@@ -196,7 +207,7 @@ public class Musixmatch implements PlatformClient {
         }
     }
 
-    private Lyrics searchTrackByTitleAndArtist(String title, String artist) {
+    private ResponseEntity<?> searchTrackByTitleAndArtist(String title, String artist) {
         String userToken = getToken();
         try {
             String formattedUrl = lyricsAlternative + "&usertoken=" + userToken
@@ -216,11 +227,13 @@ public class Musixmatch implements PlatformClient {
                 String trackId = trackMatcher.group(1);
                 String trackName = trackMatcher.group(2);
                 String artistName = trackMatcher.group(3);
-                String artworkUrl = trackMatcher.group(4);
+                String artworkUrl = trackMatcher.group(4).replace("\\/", "/");
 
-                return new Lyrics(artistName, trackName, trackId, "Musixmatch", artworkUrl, lyrics);
+                Lyrics newLyrics = new Lyrics(artistName, trackName, trackId, "Musixmatch", artworkUrl, lyrics);
+                return new ResponseEntity<>(newLyrics, HttpStatus.OK);
             } else {
-                throw new RuntimeException("No lyrics found for title: " + title + " and artist: " + artist);
+                LyricsNotFound noLyrics = new LyricsNotFound("No lyrics found for title " + "'" + title + "'" + " and artist " + "'" + artist + "'.");
+                return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
             }
 
         } catch (Exception e) {
@@ -229,7 +242,7 @@ public class Musixmatch implements PlatformClient {
     }
 
     @Override
-    public Lyrics fetchLyrics(String title, String artist, String translate) {
+    public ResponseEntity<?> fetchLyrics(String title, String artist, String translate) {
         if (artist != null && !artist.isEmpty() && translate == null) {
             return searchTrackByTitleAndArtist(title, artist);
         } else if (artist == null && translate == null) {

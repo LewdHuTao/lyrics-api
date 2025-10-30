@@ -2,9 +2,8 @@ package com.example.lyrics_api_v2.controller;
 
 import com.example.lyrics_api_v2.model.ApiResponse;
 import com.example.lyrics_api_v2.model.ApiVersion;
-import com.example.lyrics_api_v2.model.Lyrics;
-import com.example.lyrics_api_v2.model.LyricsNotFound;
 import com.example.lyrics_api_v2.service.LyricsService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,14 +24,12 @@ public class LyricsController {
             @RequestParam(required = false) String artist,
             @RequestParam(required = false) String translate
     ) {
-        Lyrics lyrics = lyricsService.getLyrics(platform, title, artist, translate);
+        ResponseEntity<?> lyricsResponse = lyricsService.getLyrics(platform, title, artist, translate);
+        Object body = lyricsResponse.getBody();
+        HttpStatus status = (HttpStatus) lyricsResponse.getStatusCode();
         ApiVersion version = new ApiVersion();
+        ApiResponse<Object> apiResponse = new ApiResponse<>(body, version);
 
-        if (lyrics == null) {
-            LyricsNotFound error = new LyricsNotFound();
-            return ResponseEntity.status(404).body(new ApiResponse<>(error, version));
-        }
-
-        return ResponseEntity.ok(new ApiResponse<>(lyrics, version));
+        return new ResponseEntity<>(apiResponse, status);
     }
 }
