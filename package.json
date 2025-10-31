@@ -1,6 +1,6 @@
 {
   "name": "lyrics-api",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "description": "A simple lyrics API that can fetch lyrics from Musixmatch and Genius API.",
   "main": "index.ts",
   "scripts": {
@@ -16,6 +16,7 @@
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.2.0",
     "path": "^0.12.7",
     "useragent": "^2.3.0"
   },
@@ -28,11 +29,11 @@
   },
   "homepage": "https://github.com/shittybot/llyrics-api#readme",
   "devDependencies": {
-    "@types/cookie-parser": "^1.4.9",
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.2.1",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.9.2",
     "@types/useragent": "^2.3.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }
