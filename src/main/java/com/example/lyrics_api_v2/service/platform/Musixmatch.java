@@ -2,6 +2,7 @@ package com.example.lyrics_api_v2.service.platform;
 
 import com.example.lyrics_api_v2.model.Lyrics;
 import com.example.lyrics_api_v2.model.LyricsNotFound;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -158,17 +159,40 @@ public class Musixmatch implements PlatformClient {
                     "&selected_language=" + langCode;
 
             String translatedResult = get(url);
-            Pattern translatedPattern = Pattern.compile("\"description\":\"(.*?)\".*?\"selected_language\":\"" + Pattern.quote(langCode) + "\"", Pattern.DOTALL);
-            Matcher translatedMatcher = translatedPattern.matcher(translatedResult);
+            JsonNode root = mapper.readTree(translatedResult);
 
             StringBuilder translatedLyrics = new StringBuilder();
-            while (translatedMatcher.find()) {
-                String line = translatedMatcher.group(1);
-                line = mapper.readValue("\"" + line.replace("\"", "\\\"") + "\"", String.class)
-                        .replaceAll("\\[\\d+:\\d+\\.\\d+\\]", "")
-                        .trim();
-                if (!line.isEmpty()) {
-                    translatedLyrics.append(line).append("\n");
+            JsonNode translations = root.path("message").path("body").path("translations_list");
+
+            if (translations.isArray()) {
+                for (int i = 0; i < translations.size(); i++) {
+                    JsonNode description = translations.get(i).path("translation").path("description");
+                    if (!description.isMissingNode()) {
+                        String line = description.asText();
+
+                        line = line
+                                .replace("\\n", "\n")
+                                .replace("\\r", "")
+                                .replace("\\t", "\t")
+                                .replace("\\\"", "\"")
+                                .replace("\\/", "/")
+                                .replace("\\\\", "\\");
+
+                        Matcher unicodeMatcher = Pattern.compile("\\\\u([0-9A-Fa-f]{4})").matcher(line);
+                        StringBuffer sb = new StringBuffer();
+
+                        while (unicodeMatcher.find()) {
+                            String unicodeChar = String.valueOf((char) Integer.parseInt(unicodeMatcher.group(1), 16));
+                            unicodeMatcher.appendReplacement(sb, Matcher.quoteReplacement(unicodeChar));
+                        }
+
+                        unicodeMatcher.appendTail(sb);
+                        line = sb.toString().trim();
+
+                        if (!line.isEmpty()) {
+                            translatedLyrics.append(line).append("\n");
+                        }
+                    }
                 }
             }
 
@@ -177,7 +201,7 @@ public class Musixmatch implements PlatformClient {
                 return new ResponseEntity<>(noTranslatedLyrics, HttpStatus.NOT_FOUND);
             }
 
-            Lyrics newLyrics = new Lyrics(artistName, trackName, trackId, "Musixmatch", artworkUrl, translatedLyrics.toString());
+            Lyrics newLyrics = new Lyrics(artistName, trackName, trackId, "Musixmatch", artworkUrl, translatedLyrics.toString().trim());
             return new ResponseEntity<>(newLyrics, HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException("Error fetching Musixmatch lyrics: " + e.getMessage());
