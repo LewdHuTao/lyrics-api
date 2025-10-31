@@ -64,10 +64,8 @@
   <div class="container mt-5">
     <section class="mt-5" id="warning-message">
       <div style="background-color: rgba(255, 0, 0, 0.3); padding: 10px; border-radius: 5px;">
-        ⚠️ The <strong>v1 API endpoint</strong> is now <strong>deprecated</strong> and no longer actively maintained.
-        While it may still function, it will not receive any further updates, bug fixes, or support. For the best
-        performance, latest features, and improved stability, please migrate to the latest <strong>v2
-          endpoints</strong>.
+        ⚠️ The <strong>v1 API endpoint</strong> is now <strong>deprecated</strong> and no longer supported. Please
+        migrate to the latest <strong>v2 endpoints</strong>.
       </div>
     </section>
 
@@ -79,16 +77,14 @@
       </p>
     </section>
 
-    <section class="mt-5" id="get_started">
+    <section class="mt-5" id="get-started">
       <h2>Getting Started</h2>
       <p>
         Welcome to the Lyrics API! Our service offers a comprehensive collection of song lyrics from various sources.
         Whether you're building a music app, website, or just curious about song lyrics, our API has you covered.
       </p>
       <p>
-        The best part? Our Lyrics API is completely free to use! No API key is required for most endpoints. However,
-        for certain advanced features, such as accessing lyrics from Genius, you'll need to sign up for a Genius API
-        key from Genius Website.
+        The best part? Our Lyrics API is completely free to use! No API key is required for all endpoints.
       </p>
       <p>
         Getting started with our API now and explore our documentation to discover the available endpoints and start
@@ -96,37 +92,13 @@
       </p>
     </section>
 
-    <section class="mt-5" id="migrating">
+    <section class="mt-5" id="endpoints">
       <div>
-        <h2>Migrating from V1 to V2</h2>
-
-        <div class="mt-4" style="
-        background-color: rgba(255, 0, 0, 0.1);
-        border-left: 4px solid rgba(255, 0, 0, 0.3);
-        padding: 16px;
-        margin-bottom: 24px;
-        font-size: 15px;
-        border-radius: 4px;
-      ">
-          The V2 API has been released with major improvements over V1. It offers better performance, more consistent
-          results, and supports both title-only and title+artist queries for higher accuracy.<br /><br />
-          Due to ongoing restrictions from Genius blocking access from popular cloud providers such as Oracle and
-          Google, the Genius platform has been removed from V2 entirely. While Genius may still work under V1, it is no
-          longer officially supported and may stop working at any time.
-        </div>
-
         <h3 class="mt-4">Endpoints:</h3>
 
         <h4 class="mx-4 mt-4">1. Musixmatch</h4>
         <div class="mx-4">
-          <p class="mt-4" style="font-size: medium; font-weight: normal;">V1 Request:</p>
-          <pre class="px-2 py-1 rounded apiUrlPlaceholder"
-            style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v1/musixmatch/lyrics?title={song_title}</code></pre>
-
-          <pre class="px-2 py-1 rounded apiUrlPlaceholder"
-            style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v1/musixmatch/lyrics?title={song_title}&artist={artist_name}</code></pre>
-
-          <p class="mt-4" style="font-size: medium; font-weight: normal;">V2 Request:</p>
+          <p class="mt-4" style="font-size: medium; font-weight: normal;">Example Request:</p>
 
           <pre class="px-2 py-1 rounded apiUrlPlaceholder"
             style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v2/musixmatch/lyrics?title={song_title}</code></pre>
@@ -137,21 +109,10 @@
 
         <h4 class="mx-4 mt-4">2. YouTube</h4>
         <div class="mx-4">
-          <p class="mt-4" style="font-size: medium; font-weight: normal;">V1 Request:</p>
-          <pre class="px-2 py-1 rounded apiUrlPlaceholder"
-            style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v1/youtube/lyrics?title={song_title}</code></pre>
-
-          <p class="mt-4" style="font-size: medium; font-weight: normal;">V2 Request:</p>
-          <p style="font-size: medium; font-weight: normal;">
-            The V2 endpoint supports fetching lyrics by <strong>title only</strong>, or by <strong>title and
-              artist</strong> for more accurate results.
-          </p>
-
-          <p class="mt-2" style="font-size: medium; font-weight: normal;">Example without artist:</p>
+          <p class="mt-4" style="font-size: medium; font-weight: normal;">Example Request:</p>
           <pre class="px-2 py-1 rounded apiUrlPlaceholder"
             style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v2/youtube/lyrics?title={song_title}</code></pre>
 
-          <p class="mt-2" style="font-size: medium; font-weight: normal;">Example with artist:</p>
           <pre class="px-2 py-1 rounded apiUrlPlaceholder"
             style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v2/youtube/lyrics?title={song_title}&artist={artist_name}</code></pre>
         </div>
@@ -175,22 +136,247 @@
       </div>
     </section>
 
-    <section class="mt-5" id="source">
-      <h2>Supported Sources</h2>
-      <p>The API can fetch lyrics from these sources:</p>
-      <ul>
-        <li><strong>Musixmatch</strong>: Best for lyrics from Spotify, Deezer, and Apple Music.</li>
-        <li><strong>YouTube Music</strong>: Great for lyrics from YouTube videos.</li>
-      </ul>
-    </section>
+    <section class="mt-5" id="translated-lyrics">
+      <h2>Translated Lyrics</h2>
+      <div class="alert alert-danger mt-3" role="alert"> ⚠️ Translated lyrics are only available for
+        <strong>Musixmatch</strong>.
+      </div>
 
-    <section class="my-5" id="response_code">
+      <div class="mt-4">
+        <p class="mt-4" style="font-size: medium; font-weight: normal;">Example Request:</p>
+        <pre class="px-2 py-1 rounded apiUrlPlaceholder"
+          style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v2/musixmatch/lyrics?title={song_title}&translate={lang_code}</code></pre>
+
+        <pre class="px-2 py-1 rounded apiUrlPlaceholder"
+          style="font-size: medium; font-weight: normal;"><code><span class="text-info">GET</span> <span class="apiUrl"></span>/v2/musixmatch/lyrics?title={song_title}&artist={artist_name}&translate={lang_code}</code></pre>
+      </div>
+
+      <div class="mt-5">
+        <h4 class="mb-3">Supported Languages</h4>
+        <input type="text" id="translateSearchInput" class="form-control mb-3"
+          placeholder="Search language or code..." />
+
+        <div class="mt-4 table-responsive">
+          <table class="table table-dark table-bordered table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th>Language</th>
+                <th>ISO-1</th>
+                <th>ISO-3</th>
+              </tr>
+            </thead>
+            <tbody id="translateLangTable">
+              <tr>
+                <td>Afar</td>
+                <td>aa</td>
+                <td>aar</td>
+              </tr>
+              <tr>
+                <td>Abkhazian</td>
+                <td>ab</td>
+                <td>abk</td>
+              </tr>
+              <tr>
+                <td>Afrikaans</td>
+                <td>af</td>
+                <td>afr</td>
+              </tr>
+              <tr>
+                <td>Akan</td>
+                <td>ak</td>
+                <td>aka</td>
+              </tr>
+              <tr>
+                <td>Albanian</td>
+                <td>sq</td>
+                <td>sqi</td>
+              </tr>
+              <tr>
+                <td>Amharic</td>
+                <td>am</td>
+                <td>amh</td>
+              </tr>
+              <tr>
+                <td>Arabic</td>
+                <td>ar</td>
+                <td>ara</td>
+              </tr>
+              <tr>
+                <td>Armenian</td>
+                <td>hy</td>
+                <td>hye</td>
+              </tr>
+              <tr>
+                <td>Basque</td>
+                <td>eu</td>
+                <td>eus</td>
+              </tr>
+              <tr>
+                <td>Bengali</td>
+                <td>bn</td>
+                <td>ben</td>
+              </tr>
+              <tr>
+                <td>Bulgarian</td>
+                <td>bg</td>
+                <td>bul</td>
+              </tr>
+              <tr>
+                <td>Chinese (Simplified)</td>
+                <td>zh</td>
+                <td>zho</td>
+              </tr>
+              <tr>
+                <td>Dutch</td>
+                <td>nl</td>
+                <td>nld</td>
+              </tr>
+              <tr>
+                <td>English</td>
+                <td>en</td>
+                <td>eng</td>
+              </tr>
+              <tr>
+                <td>Filipino</td>
+                <td>f1</td>
+                <td>fil</td>
+              </tr>
+              <tr>
+                <td>French</td>
+                <td>fr</td>
+                <td>fra</td>
+              </tr>
+              <tr>
+                <td>German</td>
+                <td>de</td>
+                <td>deu</td>
+              </tr>
+              <tr>
+                <td>Greek</td>
+                <td>el</td>
+                <td>ell</td>
+              </tr>
+              <tr>
+                <td>Hebrew</td>
+                <td>he</td>
+                <td>heb</td>
+              </tr>
+              <tr>
+                <td>Hindi</td>
+                <td>hi</td>
+                <td>hin</td>
+              </tr>
+              <tr>
+                <td>Indonesian</td>
+                <td>id</td>
+                <td>ind</td>
+              </tr>
+              <tr>
+                <td>Italian</td>
+                <td>it</td>
+                <td>ita</td>
+              </tr>
+              <tr>
+                <td>Japanese</td>
+                <td>ja</td>
+                <td>jpn</td>
+              </tr>
+              <tr>
+                <td>Japanese (Romanized)</td>
+                <td>rj</td>
+                <td>rja</td>
+              </tr>
+              <tr>
+                <td>Korean</td>
+                <td>ko</td>
+                <td>kor</td>
+              </tr>
+              <tr>
+                <td>Korean (Romanized)</td>
+                <td>rk</td>
+                <td>rkr</td>
+              </tr>
+              <tr>
+                <td>Malay</td>
+                <td>ms</td>
+                <td>msa</td>
+              </tr>
+              <tr>
+                <td>Portuguese</td>
+                <td>pt</td>
+                <td>por</td>
+              </tr>
+              <tr>
+                <td>Russian</td>
+                <td>ru</td>
+                <td>rus</td>
+              </tr>
+              <tr>
+                <td>Russian (Romanized)</td>
+                <td>r2</td>
+                <td>ru2</td>
+              </tr>
+              <tr>
+                <td>Spanish</td>
+                <td>es</td>
+                <td>spa</td>
+              </tr>
+              <tr>
+                <td>Tamil</td>
+                <td>ta</td>
+                <td>tam</td>
+              </tr>
+              <tr>
+                <td>Tamil (Romanized)</td>
+                <td>t2</td>
+                <td>ta2</td>
+              </tr>
+              <tr>
+                <td>Thai</td>
+                <td>th</td>
+                <td>tha</td>
+              </tr>
+              <tr>
+                <td>Thai (Romanized)</td>
+                <td>t4</td>
+                <td>tr1</td>
+              </tr>
+              <tr>
+                <td>Turkish</td>
+                <td>tr</td>
+                <td>tur</td>
+              </tr>
+              <tr>
+                <td>Urdu</td>
+                <td>ur</td>
+                <td>urd</td>
+              </tr>
+              <tr>
+                <td>Urdu (Romanized)</td>
+                <td>u1</td>
+                <td>ur1</td>
+              </tr>
+              <tr>
+                <td>Vietnamese</td>
+                <td>vi</td>
+                <td>vie</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+    <script> document.getElementById("translateSearchInput").addEventListener("keyup", function () { const filter = this.value.toLowerCase(); const rows = document.querySelectorAll("#translateLangTable tr"); rows.forEach(row => { const text = row.textContent.toLowerCase(); row.style.display = text.includes(filter) ? "" : "none"; }); }); </script>
+
+    <section class="my-5" id="response-code">
       <h2>Response Codes</h2>
       <ul>
         <li><code>200</code>: Success</li>
         <li><code>400</code>: Bad Request</li>
-        <li><code>401</code>: Unauthorized</li>
         <li><code>404</code>: Not Found</li>
+        <li><code>410</code>: Gone</li>
+        <li><code>429</code>: Too Many Requests</li>
         <li><code>500</code>: Internal Server Error</li>
       </ul>
     </section>
@@ -198,7 +384,7 @@
 
   <footer>
     <div class="footer">
-      <p>&copy; 2025 All rights reserved.</p>
+      <p>&copy; LewdHuTao © 2025 All rights reserved.</p>
     </div>
   </footer>
 

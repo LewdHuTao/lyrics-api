@@ -6,9 +6,11 @@ A simple lyrics API that fetches lyrics from sources like Musixmatch and YouTube
 
 ## ❗ V1 API Deprecated
 
-> **The `/v1` endpoints are deprecated and no longer maintained.**  
-> While they may still function, they will not receive bug fixes, updates, or support.  
-> Please migrate to `/v2` endpoints for improved accuracy, speed, and stability.
+These endpoints are no longer supported and please use the API v2.
+
+- `/v1/musixmatch/lyrics`
+- `/v1/youtube/lyrics`
+- `/v1/genius/lyrics` 
 
 ---
 
@@ -96,14 +98,134 @@ GET /v2/youtube/lyrics?title=back%20to%20friends&artist=sombr
 
 ---
 
-## Deprecated v1 Endpoints
+## Translated Lyrics
+### Note: Translated lyrics are only available for Musixmatch
 
-These are no longer maintained and may stop working at any time:
+**Examples:**
 
-- `/v1/musixmatch/lyrics`
-- `/v1/youtube/lyrics`
-- `/v1/genius/lyrics` 
+```
+GET /v2/musixmatch/lyrics?title={title}&translate={lang_code}
+GET /v2/musixmatch/lyrics?title={title}&artist={artist}&translate={lang_code}
+```
 
+**Supported Languages**
+
+<details>
+<summary>Click to expand full list</summary>
+
+| Language Name    | ISO-1 | ISO-3 |
+|------------------|----|-----|
+| Afar             | aa | aar |
+| Abkhazian        | ab | abk |
+| Afrikaans        | af | afr |
+| Akan             | ak | aka |
+| Albanian         | sq | sqi |
+| Amharic          | am | amh |
+| Arabic           | ar | ara |
+| Aragonese        | an | arg |
+| Armenian         | hy | hye |
+| Assamese         | as | asm |
+| Asturian         | a3 | ast |
+| Avaric           | av | ava |
+| Avestan          | ae | ave |
+| Aymara           | ay | aym |
+| Azerbaijani      | az | aze |
+| Bashkir          | ba | bak |
+| Bambara          | bm | bam |
+| Basque           | eu | eus |
+| Belarusian       | be | bel |
+| Bengali          | bn | ben |
+| Bihari Languages | bh | bh0 |
+| Bislama          | bi | bis |
+| Bosnian          | bs | bos |
+| Breton           | br | bre |
+| Bulgarian        | bg | bul |
+| Burmese          | my | mya |
+| Catalan          | ca | cat |
+| Cebuano          | c2 | ceb |
+| Chamorro         | ch | cha |
+| Chechen          | ce | che |
+| Chinese (Simplified) | zh | zho |
+| Church Slavic    | cu | chu |
+| Chuvash          | cv | chv |
+| Cornish          | kw | cor |
+| Corsican         | co | cos |
+| Czech            | cs | ces |
+| Danish           | da | dan |
+| Divehi           | dv | div |
+| Dutch            | nl | nld |
+| Dzongkha         | dz | dzo |
+| English          | en | eng |
+| Esperanto        | eo | epo |
+| Estonian         | et | est |
+| Fijian           | fj | fij |
+| Filipino         | f1 | fil |
+| Finnish          | fi | fin |
+| French           | fr | fra |
+| German           | de | deu |
+| Greek            | el | ell |
+| Gujarati         | gu | guj |
+| Hebrew           | he | heb |
+| Hindi            | hi | hin |
+| Hungarian        | hu | hun |
+| Icelandic        | is | isl |
+| Indonesian       | id | ind |
+| Italian          | it | ita |
+| Japanese         | ja | jpn |
+| Japanese (Romanized) | rj | rja |
+| Korean**         | ko | kor |
+| Korean (Romanized) | rk | rkr |
+| Khmer, Central   | km | khm |
+| Lao              | lo | lao |
+| Latin            | la | lat |
+| Lithuanian       | lt | lit |
+| Macedonian       | mk | mkd |
+| Malay            | ms | msa |
+| Malayalam        | ml | mal |
+| Malayalam (Romanized) | m8 | ma8 |
+| Marathi          | mr | mar |
+| Marathi (Romanized) | m9 | ma9 |
+| Mongolian        | mn | mon |
+| Nepali           | ne | nep |
+| Nepali (Romanized) | n5 | ne5 |
+| Norwegian        | no | nor |
+| Oriya            | or | ori |
+| Oriya (Romanized) | o1 | or1 |
+| Panjabi          | pa | pan |
+| Panjabi (Romanized) | p5 | pa5 |
+| Persian          | fa | fas |
+| Polish           | pl | pol |
+| Portuguese       | pt | por |
+| Romanian         | ro | ron |
+| Russian       | ru | rus |
+| Russian (Romanized) | r2 | ru2 |
+| Sanskrit         | sa | san |
+| Sanskrit (Romanized) | s4 | sa4 |
+| Serbian          | sr | srp |
+| Sinhala          | si | sin |
+| Slovak           | sk | slk |
+| Slovenian        | sl | slv |
+| Spanish          | es | spa |
+| Swahili          | sw | swa |
+| Swedish          | sv | swe |
+| Tamil            | ta | tam |
+| Tamil (Romanized) | t2 | ta2 |
+| Telugu           | te | tel |
+| Telugu (Romanized) | t3 | te3 |
+| Thai             | th | tha |
+| Thai (Romanized) | t4 | tr1 |
+| Turkish          | tr | tur |
+| Ukrainian        | uk | ukr |
+| Urdu             | ur | urd |
+| Urdu (Romanized) | u1 | ur1 |
+| Uzbek            | uz | uzb |
+| Vietnamese       | vi | vie |
+| Welsh            | cy | cym |
+| Xhosa            | xh | xho |
+| Yoruba           | yo | yor |
+| Zulu             | zu | zul |
+
+</details>
 
 ---
 
@@ -113,18 +235,10 @@ These are no longer maintained and may stop working at any time:
 |------|------------------------|
 | 200  | OK                     |
 | 400  | Bad Request            |
-| 401  | Unauthorized           |
 | 404  | Not Found              |
+| 410  | Gone                   |
+| 429  | Too Many Requests      |
 | 500  | Internal Server Error  |
-
----
-
-## Supported Sources
-
-- **Musixmatch**: Best for Spotify / Apple Music tracks
-- **YouTube Music**: For video-based lyrics
-
----
 
 ## Public API Demo
 

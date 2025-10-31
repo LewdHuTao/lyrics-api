@@ -8,7 +8,7 @@ const router: Router = express.Router();
 router.use(express.json());
 router.use(cookieParser());
 
-type UrlBuilder = (platform: string, title: string, artist?: string, api_key?: string) => string;
+type UrlBuilder = (platform: string, title: string, artist?: string, translate?: string) => string;
 
 interface ApiVersionConfig {
     requiredParams: (platform: string) => string[];
@@ -18,9 +18,10 @@ interface ApiVersionConfig {
 const API_CONFIG: Record<string, ApiVersionConfig> = {
     v2: {
         requiredParams: () => ['title'],
-        buildUrl: (platform, title, artist) => {
+        buildUrl: (platform, title, artist, translate) => {
             const params = new URLSearchParams({ platform, title });
             if (artist) params.append('artist', artist);
+            if (translate) params.append('translate', translate);
             return `${config.apiUrlV2}/api/v2/lyrics?${params.toString()}`;
         }
     }
@@ -30,6 +31,7 @@ router.get('/:apiVersion/:platform/lyrics', async (req: Request, res: Response) 
     const { apiVersion, platform } = req.params;
     const title = req.query.title as string | undefined;
     const artist = req.query.artist as string | undefined;
+    const translate = req.query.translate as string | undefined;
 
     if (apiVersion.toLowerCase() === 'v1') {
         return res.status(410).json({
@@ -56,7 +58,7 @@ router.get('/:apiVersion/:platform/lyrics', async (req: Request, res: Response) 
     }
 
     try {
-        const apiUrl = configEntry.buildUrl(platform, title!, artist);
+        const apiUrl = configEntry.buildUrl(platform, title!, artist, translate);
         const response = await fetch(apiUrl);
         const data = await response.json();
         res.send(data);
