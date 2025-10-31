@@ -87,15 +87,21 @@ public class Musixmatch implements PlatformClient {
         String formattedUrl = lyricsUrl + "&track_id=" + trackId + "&usertoken=" + userToken;
         String result = get(formattedUrl);
 
-        Pattern pattern = Pattern.compile("\"subtitle_body\":\"(.*?)\"");
+        Pattern pattern = Pattern.compile("\"subtitle_body\":\"(.*?)\"", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(result);
 
         if (matcher.find()) {
-            String lyrics = matcher.group(1);
+            String raw = matcher.group(1);
+
             ObjectMapper mapper = new ObjectMapper();
-            lyrics = mapper.readValue("\"" + lyrics.replace("\"", "\\\"") + "\"", String.class)
-                    .replaceAll("\\[\\d+:\\d+\\.\\d+\\]", "")
+            String lyrics = mapper.readValue("\"" + raw.replace("\"", "\\\"") + "\"", String.class);
+            lyrics = lyrics.replaceAll("\\[\\d{2}:\\d{2}\\.\\d{2}\\]", "");
+            lyrics = lyrics
+                    .replaceAll("(?m)^\\s+", "")
+                    .replaceAll("(?m)\\s+$", "")
+                    .replaceAll("\\n{2,}", "\n")
                     .trim();
+
             return lyrics;
         } else {
             throw new RuntimeException("Lyrics not found for track ID: " + trackId);
