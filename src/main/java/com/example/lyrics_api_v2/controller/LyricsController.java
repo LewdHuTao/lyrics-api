@@ -21,10 +21,11 @@ public class LyricsController {
     public ResponseEntity<?> getLyrics(
             @RequestParam String platform,
             @RequestParam String title,
+            @RequestParam(required = false) String trackId,
             @RequestParam(required = false) String artist,
             @RequestParam(required = false) String translate
     ) {
-        ResponseEntity<?> lyricsResponse = lyricsService.getLyrics(platform, title, artist, translate);
+        ResponseEntity<?> lyricsResponse = lyricsService.getLyrics(platform, title, trackId, artist, translate);
         Object body = lyricsResponse.getBody();
         HttpStatus status = (HttpStatus) lyricsResponse.getStatusCode();
         ApiVersion version = new ApiVersion();
