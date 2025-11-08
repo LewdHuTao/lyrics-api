@@ -47,12 +47,15 @@ Search for lyrics using Musixmatch.
 **Method:** `GET`
 
 **Query Parameters:**
-- `title` (required): Song title
+- `trackId` (optional): Track Id
+- `title` (optional): Song title
 - `artist` (optional): Artist name
+> ⚠️ **Note:** At least one of `title` or `trackid` must be provided. Both cannot be null or empty.
 
 **Examples:**
 
 ```
+GET /v2/musixmatch/lyrics?trackid=349001048
 GET /v2/musixmatch/lyrics?title=back%20to%20friends
 GET /v2/musixmatch/lyrics?title=back%20to%20friends&artist=sombr
 ```
@@ -66,12 +69,15 @@ Search for lyrics using YouTube Music.
 **Method:** `GET`
 
 **Query Parameters:**
-- `title` (required): Song title
+- `trackId` (optional): Track Id
+- `title` (optional): Song title
 - `artist` (optional): Artist name
+> ⚠️ **Note:** At least one of `title` or `trackid` must be provided. Both cannot be null or empty.
 
 **Examples:**
 
 ```
+GET /v2/youtube/lyrics?trackid=dbEY-JVHJWg
 GET /v2/youtube/lyrics?title=back%20to%20friends
 GET /v2/youtube/lyrics?title=back%20to%20friends&artist=sombr
 ```
@@ -104,6 +110,7 @@ GET /v2/youtube/lyrics?title=back%20to%20friends&artist=sombr
 **Examples:**
 
 ```
+GET /v2/musixmatch/lyrics?trackid={trackId}&translate={lang_code}
 GET /v2/musixmatch/lyrics?title={title}&translate={lang_code}
 GET /v2/musixmatch/lyrics?title={title}&artist={artist}&translate={lang_code}
 ```
