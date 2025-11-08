@@ -27,23 +27,40 @@
 
 | Name        | Type   | Required | Description                                        |
 |-------------|--------|----------|----------------------------------------------------|
-| `platform`  | String | ✅ Yes   | Platform to fetch from (`youtube` or `musixmatch`) |
-| `title`     | String | ✅ Yes   | Title of the song                                  |
-| `artist`    | String | ❌ No    | Artist name                                        |
-| `translate` | String | ❌ No    | Language Code (Only for Musixmatch)                |
+| `platform`  | String | ✅ Yes    | Platform to fetch from (`youtube` or `musixmatch`) |
+| `title`     | String | ❌ No     | Title of the song                                  |
+| `trackid`   | String | ❌ No     | TrackId of the song                                |
+| `artist`    | String | ❌ No     | Artist name                                        |
+| `translate` | String | ❌ No     | Language Code (Only for Musixmatch)                |
+
+> ⚠️ **Note:** At least one of `title` or `trackid` must be provided. Both cannot be null or empty.
+
 
 ### **Get Lyrics**
+Without trackId paramater
 ```http
 GET http://localhost:8888/api/v2/lyrics?platform={platform}&title={title}&artist={artist}
+```
+With trackId parameter
+```http
+GET http://localhost:8888/api/v2/lyrics?platform={platform}&trackid={trackId}
 ```
 
 ### **Get Translated Lyrics**
 
 **⚠️ Note: Translation features are currently available only on Musixmatch.**
+
 **Support for other platforms may be added in future updates.**
 
+**Can use trackId, title, and artist parameters.**
+
+Without trackId (Can be only the title, and both the title and artist)
 ```http
 GET http://localhost:8888/api/v2/lyrics?platform=musixmatch&title={title}&artist={artist}&translate={lang_code}
+```
+With trackId
+```http
+GET http://localhost:8888/api/v2/lyrics?platform=musixmatch&trackid={trackId}&translate={lang_code}
 ```
 **Available language codes**
 
