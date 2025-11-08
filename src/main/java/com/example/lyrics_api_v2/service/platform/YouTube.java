@@ -186,7 +186,7 @@ public class YouTube implements PlatformClient {
             JsonNode root = objectMapper.readTree(response.body().string());
             JsonNode playlistNode = root
                     .at("/contents/singleColumnMusicWatchNextResultsRenderer/tabbedRenderer/watchNextTabbedResultsRenderer/tabs/0/tabRenderer/content/musicQueueRenderer/content/playlistPanelRenderer/contents/0/playlistPanelVideoRenderer");
-        System.out.println(playlistNode);
+
             String title = playlistNode.at("/title/runs/0/text").asText(null);
             String artist = playlistNode.at("/longBylineText/runs/0/text").asText(null);
             String thumbnailUrl = playlistNode.at("/thumbnail/thumbnails/1/url").asText(null);
