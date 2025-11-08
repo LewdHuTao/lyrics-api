@@ -1,5 +1,6 @@
 package com.example.lyrics_api_v2.service.platform;
 
+import com.example.lyrics_api_v2.model.InternalServerError;
 import com.example.lyrics_api_v2.model.Lyrics;
 import com.example.lyrics_api_v2.model.LyricsNotFound;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -26,6 +27,7 @@ public class YouTube implements PlatformClient {
     private String artistName;
     private String trackTitle;
     private String artworkUrl;
+    private String trackId;
     private Map<String, Object> context = new HashMap<>();
 
     @PostConstruct
@@ -56,50 +58,6 @@ public class YouTube implements PlatformClient {
     private String extract(String html, String pattern) {
         java.util.regex.Matcher matcher = java.util.regex.Pattern.compile(pattern).matcher(html);
         return matcher.find() ? matcher.group(1) : null;
-    }
-
-    @Override
-    public ResponseEntity<?> fetchLyrics(String trackId, String title, String artist, String langCode){
-        try {
-            String query = (artist != null && !artist.isBlank()) ? title + " " + artist : title;
-            List<String> songVideoIds = searchSongVideoIds(query);
-
-            if (songVideoIds.isEmpty()) {
-                String message;
-                if (artist != null && !artist.isEmpty()) {
-                    message = "No lyrics found for title '" + title + "' and artist '" + artist + "'.";
-                } else {
-                    message = "No lyrics found for title '" + title + "'.";
-                }
-                LyricsNotFound noLyrics = new LyricsNotFound(message);
-                return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
-            }
-
-            for (int i = 0; i < songVideoIds.size(); i++) {
-                String videoId = songVideoIds.get(i);
-                String browseId = getLyricsBrowseId(videoId);
-                if (browseId == null) continue;
-                fetchSongContent(videoId);
-
-                String lyricsContent = fetchLyricsContent(browseId);
-                if (lyricsContent != null && !lyricsContent.isBlank()) {
-                    Lyrics newLyrics = new Lyrics(this.artistName, this.trackTitle, videoId, "YouTube", this.artworkUrl, lyricsContent);
-                    return new ResponseEntity<>(newLyrics, HttpStatus.OK);
-                }
-            }
-
-            String message;
-            if (artist != null && !artist.isEmpty()) {
-                message = "No lyrics found for title '" + title + "' and artist '" + artist + "'.";
-            } else {
-                message = "No lyrics found for title '" + title + "'.";
-            }
-            LyricsNotFound noLyrics = new LyricsNotFound(message);
-            return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error fetching YouTube lyrics: " + e.getMessage());
-        }
     }
 
     private List<String> searchSongVideoIds(String query) throws IOException {
@@ -158,7 +116,7 @@ public class YouTube implements PlatformClient {
         return ids;
     }
 
-    private String getLyricsBrowseId(String videoId) throws IOException {
+    private String fetchLyricsBrowseId(String videoId) throws IOException {
         String url = "https://music.youtube.com/youtubei/v1/next?key=" + apiKey;
 
         Map<String, Object> payload = Map.of(
@@ -228,14 +186,16 @@ public class YouTube implements PlatformClient {
             JsonNode root = objectMapper.readTree(response.body().string());
             JsonNode playlistNode = root
                     .at("/contents/singleColumnMusicWatchNextResultsRenderer/tabbedRenderer/watchNextTabbedResultsRenderer/tabs/0/tabRenderer/content/musicQueueRenderer/content/playlistPanelRenderer/contents/0/playlistPanelVideoRenderer");
-
+        System.out.println(playlistNode);
             String title = playlistNode.at("/title/runs/0/text").asText(null);
             String artist = playlistNode.at("/longBylineText/runs/0/text").asText(null);
             String thumbnailUrl = playlistNode.at("/thumbnail/thumbnails/1/url").asText(null);
+            String trackId = playlistNode.at("/videoId").asText(null);
 
             this.trackTitle = title;
             this.artistName = artist;
             this.artworkUrl = thumbnailUrl;
+            this.trackId = trackId;
         }
         return  null;
     }
@@ -276,5 +236,72 @@ public class YouTube implements PlatformClient {
             }
             return lyrics.toString().trim();
         }
+    }
+
+    public ResponseEntity<?> getLyrics(String trackId, String title, String artist, String langCode) throws IOException {
+        trackId = (trackId == null) ? "" : trackId.trim();
+        title = (title == null) ? "" : title.trim();
+        artist = (artist == null) ? "" : artist.trim();
+
+        if (!trackId.isEmpty() && title.isEmpty() && artist.isEmpty()) {
+            String browseId = fetchLyricsBrowseId(trackId);
+            fetchSongContent(trackId);
+
+            if (browseId != null) {
+                String lyrics = fetchLyricsContent(browseId);
+                if (lyrics != null) {
+                    Lyrics newLyrics = new Lyrics(this.artistName, this.trackTitle, this.trackId, "YouTube", this.artworkUrl, lyrics);
+                    return new ResponseEntity<>(newLyrics, HttpStatus.OK);
+                }
+            } else {
+                LyricsNotFound noLyrics = new LyricsNotFound("No lyrics found for trackId " + "'" + trackId + "'.");
+                return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
+            }
+        } else if (trackId.isEmpty()) {
+            String query = (artist != null && !artist.isBlank()) ? title + " " + artist : title;
+            List<String> songVideoIds = searchSongVideoIds(query);
+
+            if (songVideoIds.isEmpty()) {
+                String message;
+                if (artist != null && !artist.isEmpty()) {
+                    message = "No lyrics found for title '" + title + "' and artist '" + artist + "'.";
+                } else {
+                    message = "No lyrics found for title '" + title + "'.";
+                }
+                LyricsNotFound noLyrics = new LyricsNotFound(message);
+                return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
+            }
+
+            for (int i = 0; i < songVideoIds.size(); i++) {
+                String videoId = songVideoIds.get(i);
+                String browseId = fetchLyricsBrowseId(videoId);
+                if (browseId == null) continue;
+                fetchSongContent(videoId);
+
+                String lyricsContent = fetchLyricsContent(browseId);
+                if (lyricsContent != null && !lyricsContent.isBlank()) {
+                    Lyrics newLyrics = new Lyrics(this.artistName, this.trackTitle, videoId, "YouTube", this.artworkUrl, lyricsContent);
+                    return new ResponseEntity<>(newLyrics, HttpStatus.OK);
+                }
+            }
+
+            String message;
+            if (artist != null && !artist.isEmpty()) {
+                message = "No lyrics found for title '" + title + "' and artist '" + artist + "'.";
+            } else {
+                message = "No lyrics found for title '" + title + "'.";
+            }
+            LyricsNotFound noLyrics = new LyricsNotFound(message);
+            return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
+        } else {
+            InternalServerError badReq = new InternalServerError("Invalid or unsupported parameter combination.");
+            return new ResponseEntity<>(badReq, HttpStatus.BAD_REQUEST);
+        }
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<?> fetchLyrics(String trackId, String title, String artist, String langCode) throws IOException {
+        return getLyrics(trackId, title, artist, langCode);
     }
 }
