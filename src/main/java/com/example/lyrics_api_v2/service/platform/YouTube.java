@@ -252,10 +252,12 @@ public class YouTube implements PlatformClient {
                 if (lyrics != null) {
                     Lyrics newLyrics = new Lyrics(this.artistName, this.trackTitle, this.trackId, "YouTube", this.artworkUrl, lyrics);
                     return new ResponseEntity<>(newLyrics, HttpStatus.OK);
+                } else {
+                    LyricsNotFound noLyrics = new LyricsNotFound("No lyrics found for trackId " + "'" + trackId + "'.");
+                    return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
                 }
             } else {
-                LyricsNotFound noLyrics = new LyricsNotFound("No lyrics found for trackId " + "'" + trackId + "'.");
-                return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
+               return null;
             }
         } else if (trackId.isEmpty()) {
             String query = (artist != null && !artist.isBlank()) ? title + " " + artist : title;
@@ -297,7 +299,6 @@ public class YouTube implements PlatformClient {
             InternalServerError badReq = new InternalServerError("Invalid or unsupported parameter combination.");
             return new ResponseEntity<>(badReq, HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
 
     @Override
