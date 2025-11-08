@@ -26,11 +26,11 @@ public class Musixmatch implements PlatformClient {
     private long tokenExpiry = 0;
 
     private final String tokenUrl = "https://apic-desktop.musixmatch.com/ws/1.1/token.get?app_id=web-desktop-app-v1.0";
-    private final String lyricsTrackSearch = "https://apic-desktop.musixmatch.com/ws/1.1/track.search?app_id=web-desktop-app-v1.0&page_size=5&page=1&s_track_rating=desc&quorum_factor=1.0";
+    private final String lyricsTrackSearchUrl = "https://apic-desktop.musixmatch.com/ws/1.1/track.search?app_id=web-desktop-app-v1.0&page_size=5&page=1&s_track_rating=desc&quorum_factor=1.0";
     private final String lyricsUrl = "https://apic-desktop.musixmatch.com/ws/1.1/track.subtitle.get?app_id=web-desktop-app-v1.0&subtitle_format=lrc";
-    private final String lyricsMacroSub = "https://apic-desktop.musixmatch.com/ws/1.1/macro.subtitles.get?format=json&namespace=lyrics_richsynched&subtitle_format=mxm&app_id=web-desktop-app-v1.0";
-    private final String translatedLyricsUrl = "https://apic-desktop.musixmatch.com/ws/1.1/crowd.track.translations.get?app_id=web-desktop-app-v1.0";
-    private final String lyricsTrackGet = "https://apic-desktop.musixmatch.com/ws/1.1/track.get?app_id=web-desktop-app-v1.0";
+    private final String lyricsMacroSubUrl = "https://apic-desktop.musixmatch.com/ws/1.1/macro.subtitles.get?format=json&namespace=lyrics_richsynched&subtitle_format=mxm&app_id=web-desktop-app-v1.0";
+    private final String lyricsTranslatedUrl = "https://apic-desktop.musixmatch.com/ws/1.1/crowd.track.translations.get?app_id=web-desktop-app-v1.0";
+    private final String lyricsTrackGetUrl = "https://apic-desktop.musixmatch.com/ws/1.1/track.get?app_id=web-desktop-app-v1.0";
 
     private String get(String urlStr) throws Exception {
         URL url = new URL(urlStr);
@@ -119,7 +119,7 @@ public class Musixmatch implements PlatformClient {
 
     private String fetchTranslatedLyrics(String trackId, String langCode, String userToken) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        String url = translatedLyricsUrl +
+        String url = lyricsTranslatedUrl +
                 "&track_id=" + trackId +
                 "&usertoken=" + userToken +
                 "&selected_language=" + langCode;
@@ -187,7 +187,7 @@ public class Musixmatch implements PlatformClient {
                 return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
             }
 
-            String formattedUrl = lyricsTrackGet + "&track_id=" + trackId + "&usertoken=" + userToken;
+            String formattedUrl = lyricsTrackGetUrl + "&track_id=" + trackId + "&usertoken=" + userToken;
             String result = get(formattedUrl);
 
             Pattern pattern = Pattern.compile("\"track_name\":\"(.*?)\".*?\"artist_name\":\"(.*?)\".*?\"album_coverart_350x350\":\"(.*?)\"", Pattern.DOTALL);
@@ -202,7 +202,7 @@ public class Musixmatch implements PlatformClient {
             Lyrics newLyrics = new Lyrics(artistName, trackName, trackId, "Musixmatch", albumCoverArt, lyrics);
             return new ResponseEntity<>(newLyrics, HttpStatus.OK);
         } else if (trackId.isEmpty() && !title.isEmpty() && artist.isEmpty() && langCode.isEmpty()) {
-            String formattedUrl = lyricsTrackSearch + "&q_track=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&usertoken=" + userToken;
+            String formattedUrl = lyricsTrackSearchUrl + "&q_track=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&usertoken=" + userToken;
             String result = get(formattedUrl);
 
             Pattern pattern = Pattern.compile("\"track_id\":(\\d+).*?\"track_name\":\"(.*?)\".*?\"artist_name\":\"(.*?)\".*?\"album_coverart_350x350\":\"(.*?)\"", Pattern.DOTALL);
@@ -222,7 +222,7 @@ public class Musixmatch implements PlatformClient {
                 return new ResponseEntity<>(noLyrics, HttpStatus.NOT_FOUND);
             }
         } else if (trackId.isEmpty() && !title.isEmpty() && !artist.isEmpty() && langCode.isEmpty()) {
-            String formattedUrl = lyricsMacroSub + "&usertoken=" + userToken
+            String formattedUrl = lyricsMacroSubUrl + "&usertoken=" + userToken
                     + "&q_album=&q_artist=" + URLEncoder.encode(artist, StandardCharsets.UTF_8)
                     + "&q_artists=&track_spotify_id=&q_track=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
 
@@ -250,7 +250,7 @@ public class Musixmatch implements PlatformClient {
         } else if (trackId.isEmpty() && !title.isEmpty() && artist.isEmpty() && !langCode.isEmpty()) {
             String track_Id = null, trackName = null, artistName = null, artworkUrl = null;
 
-            String formattedUrl = lyricsTrackGet + "&q_track=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&usertoken=" + userToken;
+            String formattedUrl = lyricsTrackGetUrl + "&q_track=" + URLEncoder.encode(title, StandardCharsets.UTF_8) + "&usertoken=" + userToken;
 
             String result = get(formattedUrl);
             Pattern pattern = Pattern.compile("\"track_id\":(\\d+).*?\"track_name\":\"(.*?)\".*?\"artist_name\":\"(.*?)\".*?\"album_coverart_350x350\":\"(.*?)\"", Pattern.DOTALL);
@@ -273,7 +273,7 @@ public class Musixmatch implements PlatformClient {
         } else if (trackId.isEmpty() && !title.isEmpty() && !artist.isEmpty() && !langCode.isEmpty()) {
             String track_Id = null, trackName = null, artistName = null, artworkUrl = null;
 
-            String formattedUrl = lyricsTrackSearch + "&usertoken=" + userToken
+            String formattedUrl = lyricsTrackSearchUrl + "&usertoken=" + userToken
                     + "&q_album=&q_artist=" + URLEncoder.encode(artist, StandardCharsets.UTF_8)
                     + "&q_artists=&track_spotify_id=&q_track=" + URLEncoder.encode(title, StandardCharsets.UTF_8);
 
@@ -298,7 +298,7 @@ public class Musixmatch implements PlatformClient {
         } else if (!trackId.isEmpty() && !langCode.isEmpty() && title.isEmpty() && artist.isEmpty()) {
             String trackName = null, artistName = null, albumCoverArt = null;
 
-            String formattedUrl = lyricsTrackGet + "&track_id=" + trackId + "&usertoken=" + userToken;
+            String formattedUrl = lyricsTrackGetUrl + "&track_id=" + trackId + "&usertoken=" + userToken;
             String result = get(formattedUrl);
 
             Pattern pattern = Pattern.compile("\"track_name\":\"(.*?)\".*?\"artist_name\":\"(.*?)\".*?\"album_coverart_350x350\":\"(.*?)\"", Pattern.DOTALL);
