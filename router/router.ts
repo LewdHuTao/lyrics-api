@@ -8,7 +8,7 @@ const router: Router = express.Router();
 router.use(express.json());
 router.use(cookieParser());
 
-type UrlBuilder = (platform: string, title: string, artist?: string, translate?: string) => string;
+type UrlBuilder = (platform: string, trackId?: string, title?: string, artist?: string, translate?: string) => string;
 
 interface ApiVersionConfig {
     requiredParams: (platform: string) => string[];
@@ -17,9 +17,11 @@ interface ApiVersionConfig {
 
 const API_CONFIG: Record<string, ApiVersionConfig> = {
     v2: {
-        requiredParams: () => ['title'],
-        buildUrl: (platform, title, artist, translate) => {
-            const params = new URLSearchParams({ platform, title });
+        requiredParams: () => [],
+        buildUrl: (platform, trackId, title, artist, translate) => {
+            const params = new URLSearchParams({ platform });
+            if (trackId) params.append('trackid', trackId);
+            if (title) params.append('title', title);
             if (artist) params.append('artist', artist);
             if (translate) params.append('translate', translate);
             return `${config.apiUrlV2}/api/v2/lyrics?${params.toString()}`;
@@ -29,6 +31,7 @@ const API_CONFIG: Record<string, ApiVersionConfig> = {
 
 router.get('/:apiVersion/:platform/lyrics', async (req: Request, res: Response) => {
     const { apiVersion, platform } = req.params;
+    const trackId = (req.query.trackid || req.query.trackId) as string | undefined;
     const title = req.query.title as string | undefined;
     const artist = req.query.artist as string | undefined;
     const translate = req.query.translate as string | undefined;
@@ -37,6 +40,13 @@ router.get('/:apiVersion/:platform/lyrics', async (req: Request, res: Response) 
         return res.status(410).json({
             message: 'API v1 is deprecated and no longer supported. Please use API v2.',
             response: '410 Gone'
+        });
+    }
+
+    if ((!trackId || trackId.trim() === '') && (!title || title.trim() === '')) {
+        return res.status(400).json({
+            message: "At least one of 'trackid' or 'title' must be provided.",
+            response: '400 Bad Request'
         });
     }
 
@@ -58,7 +68,7 @@ router.get('/:apiVersion/:platform/lyrics', async (req: Request, res: Response) 
     }
 
     try {
-        const apiUrl = configEntry.buildUrl(platform, title!, artist, translate);
+        const apiUrl = configEntry.buildUrl(platform, trackId, title, artist, translate);
         const response = await fetch(apiUrl);
         const data = await response.json();
         res.send(data);

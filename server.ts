@@ -21,7 +21,7 @@ function logDetails(req: Request, res: Response, next: NextFunction) {
 }
 
 if (config.ratelimit) {
-  app.use(ratelimit);
+  app.use('/v2', ratelimit);
 }
 
 app.use(logDetails);
