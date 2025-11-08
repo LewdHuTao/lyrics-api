@@ -27,12 +27,14 @@ if (config.ratelimit) {
 app.use(logDetails);
 app.use(router);
 
-app.get('/', async (req, res) => {
-  res.sendFile(path.join(__dirname, 'documentation', 'index.html'), {
-    maxAge: 0,
-    etag: false,
-  });
+
+app.get('/', (req, res) => {
+  res.setHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  res.setHeader('Expires', '-1');
+  res.setHeader('Pragma', 'no-cache');
+  res.sendFile(path.join(__dirname, 'documentation', 'index.html'));
 });
+
 
 export const startServer = () => {
   app.listen(PORT, () => {
