@@ -16,12 +16,12 @@ public class LyricsService {
         this.youtube = youtube;
     }
 
-    public ResponseEntity<?> getLyrics(String platform, String title, String artist, String translate) {
+    public ResponseEntity<?> getLyrics(String platform, String trackId, String title, String artist, String translate) throws Exception {
         switch (platform.toLowerCase()) {
             case "musixmatch":
-                return musixmatch.fetchLyrics(title, artist, translate);
+                return musixmatch.fetchLyrics(trackId, title, artist, translate);
             case "youtube":
-                return youtube.fetchLyrics(title, artist, translate);
+                return youtube.fetchLyrics(trackId, title, artist, translate);
             default:
                 throw new IllegalArgumentException("Unsupported platform: " + platform);
         }

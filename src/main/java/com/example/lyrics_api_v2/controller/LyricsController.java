@@ -20,11 +20,12 @@ public class LyricsController {
     @GetMapping
     public ResponseEntity<?> getLyrics(
             @RequestParam String platform,
-            @RequestParam String title,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String trackid,
             @RequestParam(required = false) String artist,
             @RequestParam(required = false) String translate
-    ) {
-        ResponseEntity<?> lyricsResponse = lyricsService.getLyrics(platform, title, artist, translate);
+    ) throws Exception {
+        ResponseEntity<?> lyricsResponse = lyricsService.getLyrics(platform, trackid, title, artist, translate);
         Object body = lyricsResponse.getBody();
         HttpStatus status = (HttpStatus) lyricsResponse.getStatusCode();
         ApiVersion version = new ApiVersion();
