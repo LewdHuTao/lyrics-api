@@ -28,7 +28,10 @@ app.use(logDetails);
 app.use(router);
 
 app.get('/', async (req, res) => {
-  res.sendFile(path.join(__dirname, 'documentation', 'index.html'));
+  res.sendFile(path.join(__dirname, 'documentation', 'index.html'), {
+    maxAge: 0,
+    etag: false,
+  });
 });
 
 export const startServer = () => {
