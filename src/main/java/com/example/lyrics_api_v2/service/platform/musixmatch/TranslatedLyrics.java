@@ -12,10 +12,6 @@ public class TranslatedLyrics {
 
     public TranslatedLyrics() {}
 
-    private void setTranslatedLyrics(StringBuilder translatedLyrics) {
-        this.translatedLyrics = translatedLyrics;
-    }
-
     public StringBuilder getTranslatedLyrics() { return translatedLyrics; }
 
     public TranslatedLyrics getTranslatedLyricsByTrackId(String token, String trackId, String langCode) {
@@ -70,7 +66,7 @@ public class TranslatedLyrics {
                 return null;
             }
 
-            setTranslatedLyrics(translatedLyrics);
+            this.translatedLyrics = translatedLyrics;
 
             return this;
         } catch (Exception e) {

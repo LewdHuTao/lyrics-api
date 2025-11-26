@@ -17,22 +17,6 @@ public class TrackMetadata {
 
     public TrackMetadata() {}
 
-    private void setTrackId(String trackId) {
-        this.trackId = trackId;
-    }
-
-    private void setTrackName(String trackName) {
-        this.trackName = trackName;
-    }
-
-    private void setArtistName(String artistName) {
-        this.artistName = artistName;
-    }
-
-    private void setArtworkUrl(String artworkUrl) {
-        this.artworkUrl = artworkUrl;
-    }
-
     public String getTrackId() { return trackId; }
     public String getTrackName() { return trackName; }
     public String getArtistName() { return artistName; }
@@ -47,10 +31,10 @@ public class TrackMetadata {
             String result = connector.get(url);
 
             JsonNode track = mapper.readTree(result).path("message").path("body").path("track");
-            this.setTrackId(trackId);
-            this.setTrackName(track.path("track_name").asText());
-            this.setArtistName(track.path("artist_name").asText());
-            this.setArtworkUrl(track.path("album_coverart_350x350").asText().replace("\\/", "/"));
+            this.trackId = trackId;
+            this.trackName = track.path("track_name").asText();
+            this.artistName = track.path("artist_name").asText();
+            this.artworkUrl = track.path("album_coverart_350x350").asText().replace("\\/", "/");
 
             return this;
         } catch (Exception e) {
@@ -72,10 +56,10 @@ public class TrackMetadata {
             if (!trackNode.isArray() || trackNode.isEmpty()) throw new RuntimeException("No lyrics found for title: " + title);
 
             JsonNode track = trackNode.get(0).path("track");
-            this.setTrackId(track.path("track_id").asText());
-            this.setTrackName(track.path("track_name").asText());
-            this.setArtistName(track.path("artist_name").asText());
-            this.setArtworkUrl(track.path("album_coverart_350x350").asText().replace("\\/", "/"));
+            this.trackId = track.path("track_id").asText();
+            this.trackName = track.path("track_name").asText();
+            this.artistName = track.path("artist_name").asText();
+            this.artworkUrl = track.path("album_coverart_350x350").asText().replace("\\/", "/");
 
             return this;
         } catch (Exception e) {
@@ -110,10 +94,10 @@ public class TrackMetadata {
                 return null;
             }
 
-            this.setTrackId(trackNode.path("track_id").asText());
-            this.setTrackName(trackNode.path("track_name").asText());
-            this.setArtistName(trackNode.path("artist_name").asText());
-            this.setArtworkUrl(trackNode.path("album_coverart_350x350").asText().replace("\\/", "/"));
+            this.trackId = trackNode.path("track_id").asText();
+            this.trackName = trackNode.path("track_name").asText();
+            this.artistName = trackNode.path("artist_name").asText();
+            this.artworkUrl = trackNode.path("album_coverart_350x350").asText().replace("\\/", "/");
 
             return this;
         } catch (Exception e) {

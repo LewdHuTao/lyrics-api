@@ -44,55 +44,121 @@ public class Musixmatch implements PlatformClient {
 
             if (metadata == null || lyrics == null) return new ResponseEntity<>(new LyricsError("No lyrics found for trackId: " + trackId, "404 Not Found"), HttpStatus.NOT_FOUND);
 
-            return new ResponseEntity<>(new LyricsSuccess(metadata.getArtistName(), metadata.getTrackName(), metadata.getTrackId(), "Musixmatch", metadata.getArtworkUrl(), lyrics.getLyrics()), HttpStatus.OK);
+            return new ResponseEntity<>(new LyricsSuccess(
+                    metadata.getArtistName(),
+                    metadata.getTrackName(),
+                    metadata.getTrackId(),
+                    "Musixmatch",
+                    metadata.getArtworkUrl(),
+                    lyrics.getLyrics()),
+                    HttpStatus.OK);
         }
 
         if (!title.isEmpty() && artist.isEmpty() && translate.isEmpty()) {
             TrackMetadata metadata = new TrackMetadata().getTrackMetadataByTitle(userToken, title);
-            if (metadata == null) return new ResponseEntity<>(new LyricsError("No lyrics found for title: " + title, "404 Not Found"), HttpStatus.NOT_FOUND);
+            if (metadata == null) return new ResponseEntity<>(new LyricsError(
+                    "No lyrics found for title: " + title,
+                    "404 Not Found"),
+                    HttpStatus.NOT_FOUND);
 
             Lyrics lyrics = new Lyrics().getLyricsByTackId(userToken, metadata.getTrackId());
-            if (lyrics == null) return new ResponseEntity<>(new LyricsError("No lyrics found for title: " + title, "404 Not Found"), HttpStatus.NOT_FOUND);
+            if (lyrics == null) return new ResponseEntity<>(new LyricsError(
+                    "No lyrics found for title: " + title,
+                    "404 Not Found"),
+                    HttpStatus.NOT_FOUND);
 
-            return new ResponseEntity<>(new LyricsSuccess(metadata.getArtistName(), metadata.getTrackName(), metadata.getTrackId(), "Musixmatch", metadata.getArtworkUrl(), lyrics.getLyrics()), HttpStatus.OK);
+            return new ResponseEntity<>(new LyricsSuccess(
+                    metadata.getArtistName(),
+                    metadata.getTrackName(),
+                    metadata.getTrackId(),
+                    "Musixmatch",
+                    metadata.getArtworkUrl(),
+                    lyrics.getLyrics()),
+                    HttpStatus.OK);
         }
 
         if (!title.isEmpty() && !artist.isEmpty() && translate.isEmpty()) {
             TrackMetadata metadata = new TrackMetadata().getTrackMetadataByTitleArtist(userToken, title, artist);
             Lyrics lyrics = new Lyrics().getLyricsByTackId(userToken, metadata.getTrackId());
 
-            if (metadata == null || lyrics == null) return new ResponseEntity<>(new LyricsError("No lyrics found for title: " + title + " and artist: " + artist, "404 Not Found"), HttpStatus.NOT_FOUND);
+            if (metadata == null || lyrics == null) return new ResponseEntity<>(new LyricsError(
+                    "No lyrics found for title: " + title + " and artist: " + artist,
+                    "404 Not Found"),
+                    HttpStatus.NOT_FOUND);
 
-            return new ResponseEntity<>(new LyricsSuccess(metadata.getArtistName(), metadata.getTrackName(), metadata.getTrackId(), "Musixmatch", metadata.getArtworkUrl(), lyrics.getLyrics()), HttpStatus.OK);
+            return new ResponseEntity<>(new LyricsSuccess(
+                    metadata.getArtistName(),
+                    metadata.getTrackName(),
+                    metadata.getTrackId(),
+                    "Musixmatch",
+                    metadata.getArtworkUrl(),
+                    lyrics.getLyrics()),
+                    HttpStatus.OK);
         }
 
         if (!trackId.isEmpty() && !translate.isEmpty()) {
             TrackMetadata metadata = new TrackMetadata().getTrackMetadataByTrackId(userToken, trackId);
             TranslatedLyrics translatedLyrics = new TranslatedLyrics().getTranslatedLyricsByTrackId(userToken, trackId, translate);
 
-            if (metadata == null || translatedLyrics == null) return new ResponseEntity<>(new LyricsError("No translated lyrics found for trackId: " + trackId, "404 Not Found"), HttpStatus.NOT_FOUND);
+            if (metadata == null || translatedLyrics == null) return new ResponseEntity<>(new LyricsError(
+                    "No translated lyrics found for trackId: " + trackId,
+                    "404 Not Found"),
+                    HttpStatus.NOT_FOUND);
 
-            return new ResponseEntity<>(new LyricsSuccess(metadata.getArtistName(), metadata.getTrackName(), metadata.getTrackId(), "Musixmatch", metadata.getArtworkUrl(), translatedLyrics.getTranslatedLyrics().toString()), HttpStatus.OK);
+            return new ResponseEntity<>(new LyricsSuccess(
+                    metadata.getArtistName(),
+                    metadata.getTrackName(),
+                    metadata.getTrackId(),
+                    "Musixmatch",
+                    metadata.getArtworkUrl(),
+                    translatedLyrics.getTranslatedLyrics().toString()),
+                    HttpStatus.OK);
         }
 
         if (!title.isEmpty() && !translate.isEmpty()) {
             TrackMetadata metadata = new TrackMetadata().getTrackMetadataByTitle(userToken, title);
-            if (metadata == null) return new ResponseEntity<>(new LyricsError("No lyrics found for title: " + title, "404 Not Found"), HttpStatus.NOT_FOUND);
+            if (metadata == null) return new ResponseEntity<>(new LyricsError(
+                    "No lyrics found for title: " + title,
+                    "404 Not Found"),
+                    HttpStatus.NOT_FOUND);
 
             TranslatedLyrics translatedLyrics = new TranslatedLyrics().getTranslatedLyricsByTrackId(userToken, metadata.getTrackId(), translate);
-            if (translatedLyrics == null) return new ResponseEntity<>(new LyricsError("No translated lyrics found for title: " + title, "404 Not Found"), HttpStatus.NOT_FOUND);
+            if (translatedLyrics == null) return new ResponseEntity<>(new LyricsError(
+                    "No translated lyrics found for title: " + title,
+                    "404 Not Found"),
+                    HttpStatus.NOT_FOUND);
 
-            return new ResponseEntity<>(new LyricsSuccess(metadata.getArtistName(), metadata.getTrackName(), metadata.getTrackId(), "Musixmatch", metadata.getArtworkUrl(), translatedLyrics.getTranslatedLyrics().toString()), HttpStatus.OK);
+            return new ResponseEntity<>(new LyricsSuccess(
+                    metadata.getArtistName(),
+                    metadata.getTrackName(),
+                    metadata.getTrackId(),
+                    "Musixmatch",
+                    metadata.getArtworkUrl(),
+                    translatedLyrics.getTranslatedLyrics().toString()),
+                    HttpStatus.OK);
         }
 
         if (!title.isEmpty() && !artist.isEmpty() && !translate.isEmpty()) {
             TrackMetadata metadata = new TrackMetadata().getTrackMetadataByTitleArtist(userToken, title, artist);
-            if (metadata == null) return new ResponseEntity<>(new LyricsError("No translated lyrics found for title: " + title + " and artist: " + artist, "404 Not Found"), HttpStatus.NOT_FOUND);
+            if (metadata == null) return new ResponseEntity<>(new LyricsError(
+                    "No translated lyrics found for title: " + title + " and artist: " + artist,
+                    "404 Not Found"),
+                    HttpStatus.NOT_FOUND);
 
             TranslatedLyrics translatedLyrics = new TranslatedLyrics().getTranslatedLyricsByTrackId(userToken, metadata.getTrackId(), translate);
-            if (translatedLyrics == null) return new ResponseEntity<>(new LyricsError("No translated lyrics found for title: " + title + " and artist: " + artist, "404 Not Found"), HttpStatus.NOT_FOUND);
+            if (translatedLyrics == null) return new ResponseEntity<>(new LyricsError(
+                    "No translated lyrics found for title: " + title + " and artist: " + artist,
+                    "404 Not Found"),
+                    HttpStatus.NOT_FOUND);
 
-            return new ResponseEntity<>(new LyricsSuccess(metadata.getArtistName(), metadata.getTrackName(), metadata.getTrackId(), "Musixmatch", metadata.getArtworkUrl(), translatedLyrics.getTranslatedLyrics().toString()), HttpStatus.OK);
+            return new ResponseEntity<>(new LyricsSuccess(
+                    metadata.getArtistName(),
+                    metadata.getTrackName(),
+                    metadata.getTrackId(),
+                    "Musixmatch",
+                    metadata.getArtworkUrl(),
+                    translatedLyrics.getTranslatedLyrics().toString()),
+                    HttpStatus.OK);
         }
 
         return new ResponseEntity<>(new LyricsError("Invalid parameters provided.", "410 Bad Request"), HttpStatus.BAD_REQUEST);
@@ -106,13 +172,19 @@ public class Musixmatch implements PlatformClient {
         if (recommendation) {
             TrackRecommendation rec = new TrackRecommendation().getTrackRecommendation(userToken, country);
 
-            if (rec == null) return new ResponseEntity<>(new LyricsError("No recommendation track found.", "404 Not Found"), HttpStatus.BAD_REQUEST);
+            if (rec == null) return new ResponseEntity<>(new LyricsError(
+                    "No recommendation track found.",
+                    "404 Not Found"),
+                    HttpStatus.NOT_FOUND);
 
             return new ResponseEntity<>(rec.getRecommendedTracks(), HttpStatus.OK);
         } else {
             TrackSearch search = new TrackSearch().getTrackSearch(userToken, title);
 
-            if (search == null) return new ResponseEntity<>(new LyricsError("No search track results found.", "404 Not Found"), HttpStatus.BAD_REQUEST);
+            if (search == null) return new ResponseEntity<>(new LyricsError(
+                    "No search track results found.",
+                    "404 Not Found"),
+                    HttpStatus.NOT_FOUND);
 
             return new ResponseEntity<>(search.getSearchResults(), HttpStatus.OK);
         }

@@ -11,10 +11,6 @@ public class Lyrics {
 
     public Lyrics() {}
 
-    private void setLyrics(String lyrics) {
-        this.lyrics = lyrics;
-    }
-
     public String getLyrics() { return lyrics; }
 
     public Lyrics getLyricsByTackId(String token, String trackId) {
@@ -43,7 +39,7 @@ public class Lyrics {
                         .replaceAll("\\n{2,}", "\n")
                         .trim();
                 lyrics = StringEscapeUtils.unescapeJava(lyrics);
-                this.setLyrics(lyrics);
+                this.lyrics = lyrics;
 
                 return this;
             } else {

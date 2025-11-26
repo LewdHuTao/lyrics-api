@@ -1,7 +1,7 @@
 package com.example.lyrics_api_v2.service;
 
-import com.example.lyrics_api_v2.service.platform.Musixmatch;
-import com.example.lyrics_api_v2.service.platform.YouTube;
+import com.example.lyrics_api_v2.service.platform.musixmatch.Musixmatch;
+import com.example.lyrics_api_v2.service.platform.youtube.YouTube;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +24,17 @@ public class LyricsService {
                 return youtube.fetchLyrics(trackId, title, artist, translate);
             default:
                 throw new IllegalArgumentException("Unsupported platform: " + platform);
+        }
+    }
+
+    public ResponseEntity<?> getSongMetadata(String platform, boolean recommendation, String country, String title) throws Exception {
+        switch (platform.toLowerCase()) {
+            case "musixmatch":
+                return musixmatch.fetchSongMetadata(recommendation, country, title);
+            case "youtube":
+                return youtube.fetchSongMetadata(recommendation, country, title);
+            default:
+                throw new IllegalArgumentException("Invalid parameter.");
         }
     }
 }

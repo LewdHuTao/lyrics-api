@@ -1,6 +1,6 @@
 package com.example.lyrics_api_v2.model;
 
-public class Lyrics {
+public class LyricsSuccess {
     private String artistName;
     private String trackName;
     private String trackId;
@@ -8,7 +8,7 @@ public class Lyrics {
     private String artworkUrl;
     private String lyrics;
 
-    public Lyrics(String artistName, String trackName, String trackId, String searchEngine, String artworkUrl, String lyrics) {
+    public LyricsSuccess(String artistName, String trackName, String trackId, String searchEngine, String artworkUrl, String lyrics) {
         this.artistName = artistName;
         this.trackName = trackName;
         this.trackId = trackId;
