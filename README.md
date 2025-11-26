@@ -25,17 +25,19 @@
 
 **Parameters**:
 
-| Name        | Type   | Required | Description                                        |
-|-------------|--------|----------|----------------------------------------------------|
-| `platform`  | String | ✅ Yes    | Platform to fetch from (`youtube` or `musixmatch`) |
-| `title`     | String | ❌ No     | Title of the song                                  |
-| `trackid`   | String | ❌ No     | TrackId of the song                                |
-| `artist`    | String | ❌ No     | Artist name                                        |
-| `translate` | String | ❌ No     | Language Code (Only for Musixmatch)                |
+| Name             | Type    | Required  | Description                                           |
+|------------------|---------|-----------|-------------------------------------------------------|
+| `platform`       | String  | Yes       | Platform to fetch from (`youtube` or `musixmatch`)    |
+| `title`          | String  | No        | Title of the song                                     |
+| `trackid`        | String  | No        | TrackId of the song                                   |
+| `artist`         | String  | No        | Artist name                                           |
+| `translate`      | String  | No        | Language Code (Only for Musixmatch)                   |
+| `recommendation` | boolean | No        | Search for recommendation track (Only for Musixmatch) |
+| `country`        | String  | No        | Search for recommendation track (Only for Musixmatch) |                                               
 
 > ⚠️ **Note:** At least one of `title` or `trackid` must be provided. Both cannot be null or empty.
 
-
+## `Endpoint: /api/v2/lyrics`
 ### **Get Lyrics**
 Without trackId paramater
 ```http
@@ -180,6 +182,28 @@ GET http://localhost:8888/api/v2/lyrics?platform=musixmatch&trackid={trackId}&tr
 | Zulu             | zu | zul |
 
 </details>
+
+## `Endpoint: /api/v2/metadata`
+This endpoint returns only track metadata (no lyrics).  
+Currently, it is only supported by Musixmatch.
+
+### **Get Track Recommendation**
+- **Without country**
+```http
+GET http://localhost:8888/api/v2/metadata?platform=musixmatch&recommendation=true
+```
+- **With country**
+
+Refer to [ISO_3166-1_alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) for full country codes.
+```http
+GET http://localhost:8888/api/v2/metadata?platform=musixmatch&recommendation=true&country={country}
+```
+
+### **Search Track**
+This endpoint searches for tracks and returns up to 5 results.
+```http
+GET http://localhost:8888/api/v2/metadata?platformm=musixmatch&title={title}
+```
 
 ## **Sample Response**:
 ```json
