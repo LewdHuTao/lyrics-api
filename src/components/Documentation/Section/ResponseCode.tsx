@@ -18,11 +18,6 @@ export default function ResponseCodeSection() {
             description: 'The requested resource could not be found. This could happen if the song or track does not exist on the specified platform.',
         },
         {
-            code: 410,
-            title: 'Gone',
-            description: 'The requested resource is no longer available. This usually indicates the user is still using the deprecated v1 API.',
-        },
-        {
             code: 429,
             title: 'Too Many Requests',
             description: 'The rate limit has been exceeded. Wait before making more requests. Consider caching responses or running the API locally.',
