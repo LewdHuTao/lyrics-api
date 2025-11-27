@@ -274,7 +274,7 @@ https://lyrics.lewdhutao.my.eu.org
 
 ## Deploy to Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/lewdhutao/lyrics-api)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/LewdHuTao/lyrics-api&env[API_URL]=http://localhost:8888&env[NODE_ENV]=production&env[RATELIMIT]=false)
 
 ---
 

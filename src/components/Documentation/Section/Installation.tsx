@@ -127,7 +127,7 @@ export default function InstallationSection() {
 
             <div className="mt-6">
                 <a
-                    href="https://vercel.com/import/project?template=https://github.com/LewdHuTao/lyrics-api&env[API_URL]=http://localhost:8888&env[ENVIRONMENT]=production&env[RATELIMIT]=false"
+                    href="https://vercel.com/import/project?template=https://github.com/LewdHuTao/lyrics-api&env[API_URL]=http://localhost:8888&env[NODE_ENV]=production&env[RATELIMIT]=false"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block px-5 py-2 bg-black text-white font-semibold rounded-md hover:bg-gray-800 transition-colors"
