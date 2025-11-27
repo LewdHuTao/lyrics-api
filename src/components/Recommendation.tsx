@@ -49,7 +49,7 @@ const RecommendationCard = ({
                 <img
                     src={data.thumbnailUrl || "/no_bg.png"}
                     alt={`${data.trackName} thumbnail`}
-                    className="h-20 w-20 rounded-lg object-cover flex-shrink-0"
+                    className="h-20 w-20 rounded-lg object-cover shrink-0"
                 />
                 <div className="flex-1 min-w-0">
                     <p className="text-base font-semibold text-gray-900 truncate">{data.trackName}</p>
