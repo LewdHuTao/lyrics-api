@@ -2,18 +2,6 @@
 
 A simple lyrics API that fetches lyrics from sources like Musixmatch and YouTube Music.
 
----
-
-## ❗ V1 API Deprecated
-
-These endpoints are no longer supported and please use the API v2.
-
-- `/v1/musixmatch/lyrics`
-- `/v1/youtube/lyrics`
-- `/v1/genius/lyrics` 
-
----
-
 ## Getting Started
 
 ### Requirements
@@ -31,7 +19,7 @@ npm install
 ### Running
 
 ```bash
-npm start
+npm run dev
 ```
 
 Once running, open: `http://localhost:3000`
@@ -58,6 +46,38 @@ Search for lyrics using Musixmatch.
 GET /v2/musixmatch/lyrics?trackid=349001048
 GET /v2/musixmatch/lyrics?title=back%20to%20friends
 GET /v2/musixmatch/lyrics?title=back%20to%20friends&artist=sombr
+```
+
+### `/v2/musixmatch/recommendation`
+
+Search for song recommendations.
+
+**Method:** `GET`
+
+**Query Parameters:**
+- `country` (optional): Country code.
+
+**Examples:**
+
+```
+GET /v2/musixmatch/recommendation
+GET /v2/musixmatch/recommendation?country=us
+```
+Refer to [ISO_3166-1_alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) for full country codes.
+
+### `/v2/musixmatch/metadata`
+
+Retrieve metadata for up to five songs matching the given title.
+
+**Method:** `GET`
+
+**Query Parameters:**
+- `title` (required): Song title.
+
+**Examples:**
+
+```
+GET /v2/musixmatch/metadata?title=Maps
 ```
 
 ---
@@ -243,7 +263,6 @@ GET /v2/musixmatch/lyrics?title={title}&artist={artist}&translate={lang_code}
 | 200  | OK                     |
 | 400  | Bad Request            |
 | 404  | Not Found              |
-| 410  | Gone                   |
 | 429  | Too Many Requests      |
 | 500  | Internal Server Error  |
 
@@ -255,7 +274,7 @@ https://lyrics.lewdhutao.my.eu.org
 
 ## Deploy to Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/lewdhutao/lyrics-api)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/LewdHuTao/lyrics-api&env[API_URL]=http://localhost:8888&env[NODE_ENV]=production&env[RATELIMIT]=false)
 
 ---
 
