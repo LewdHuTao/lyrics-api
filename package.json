@@ -1,6 +1,6 @@
 {
   "name": "lyricsapi",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,20 +9,20 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "lucide-react": "^0.555.0",
-    "next": "16.0.7",
-    "react": "19.2.1",
-    "react-dom": "19.2.1"
+    "lucide-react": "^0.561.0",
+    "next": "16.0.10",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^24",
+    "@types/node": "^25",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.0.7",
+    "eslint-config-next": "16.0.10",
     "i": "^0.3.7",
-    "npm": "^11.6.4",
+    "npm": "^11.7.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
