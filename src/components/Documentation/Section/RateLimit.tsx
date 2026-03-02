@@ -11,7 +11,7 @@ export default function RateLimitSection() {
 
             <h2 className="text-md font-semibold text-black mt-4">Limit Details</h2>
             <ul className="list-disc list-inside text-slate-900 ml-4 space-y-1">
-                <li>Maximum of <strong>20 requests per minute</strong> per IP address.</li>
+                <li>Maximum of <strong>10 requests per minute</strong> per IP address.</li>
                 <li>If the limit is exceeded, the API returns a <code>429 Too Many Requests</code> status code.</li>
                 <li>Rate limits reset automatically after the time window expires.</li>
             </ul>
