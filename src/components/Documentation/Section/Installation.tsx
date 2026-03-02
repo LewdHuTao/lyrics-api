@@ -47,14 +47,14 @@ export default function InstallationSection() {
                     <ul className="list-disc list-inside ml-5 mt-1 space-y-3">
                         <li>
                             Start the API using the default port (Default port is set to: 8888):
-                            <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm">
+                            <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm overflow-x-auto">
                                 java -jar LyricsApi.jar
                             </pre>
                         </li>
 
                         <li>
                             Or run the API on a custom port:
-                            <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm">
+                            <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm overflow-x-auto">
                                 java -jar LyricsApi.jar --server.port=8085
                             </pre>
                         </li>
@@ -76,7 +76,7 @@ export default function InstallationSection() {
             <ol className="list-decimal list-inside space-y-4 text-black">
                 <li>
                     <span className="font-medium text-black">Clone the Repository</span>
-                    <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm">
+                    <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm overflow-x-auto">
                         git clone https://github.com/LewdHuTao/lyrics-api.git<br></br>
                         cd lyrics-api
                     </pre>
@@ -84,7 +84,7 @@ export default function InstallationSection() {
 
                 <li>
                     <span className="font-medium text-black">Install Dependencies</span>
-                    <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm">
+                    <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm overflow-x-auto">
                         npm install
                     </pre>
                 </li>
@@ -98,7 +98,7 @@ export default function InstallationSection() {
                         </li>
                         <li>
                             Open the <code className="px-1 py-0.5 bg-slate-100 rounded">.env</code> file and set the <code className="px-1 py-0.5 bg-slate-100 rounded">API_URL</code> to your API endpoint:
-                            <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm">
+                            <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm overflow-x-auto">
                                 API_URL=http://localhost:8888
                             </pre>
                             <p className="mt-1 text-black">
@@ -112,7 +112,7 @@ export default function InstallationSection() {
 
                 <li>
                     <span className="font-medium text-black">Run the Development Server</span>
-                    <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm">
+                    <pre className="bg-slate-900 text-slate-200 p-3 rounded-lg mt-2 text-sm overflow-x-auto">
                         npm run dev
                     </pre>
                     <p className="mt-1 text-black">
