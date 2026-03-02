@@ -2,14 +2,14 @@
 
 **Lyrics API v2** is a Java-based API that fetches and serves song lyrics from multiple sources.
 
-## ✨ Features
+## Features
 - **Multiple Sources**:
     - YouTube
     - Musixmatch
 - **Fast & Lightweight**: Fully implemented in Java for speed and stability.
 - **Easy Integration**: Simple REST endpoints for quick adoption into any app or service.
 
-## 📦 Installation & Setup
+## Installation & Setup
 1. **Download the Latest Release**
     - Go to the [Releases](../../releases) page.
     - Download the latest `LyricsApi.jar` file.
@@ -202,7 +202,7 @@ GET http://localhost:8888/api/v2/metadata?platform=musixmatch&recommendation=tru
 ### **Search Track**
 This endpoint searches for tracks and returns up to 5 results.
 ```http
-GET http://localhost:8888/api/v2/metadata?platformm=musixmatch&title={title}
+GET http://localhost:8888/api/v2/metadata?platform=musixmatch&title={title}
 ```
 
 ## **Sample Response**:
@@ -220,4 +220,22 @@ GET http://localhost:8888/api/v2/metadata?platformm=musixmatch&title={title}
     "apiVersion": "2.0"
   }
 }
+```
+
+## **Enable Rate Limit and IP Block**:
+Rename `application.yml.example` to `application.yml`.
+
+```yaml
+settings:
+  # Enable IP blocking to allow requests only from specific IP addresses.
+  ip-block: false
+  # List of IP addresses allowed to access the API when IP blocking is enabled.
+  allowed-ip:
+  - 127.0.0.1
+  # Rate limiting configuration
+  # Set 'enabled' to true to limit the number of requests per IP.
+  # 'req-per-minute' defines how many requests an IP can make per minute.
+  rate-limit:
+    enabled: false
+    req-per-minute: 10
 ```
